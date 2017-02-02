@@ -48,18 +48,18 @@ public class MainWindow {
 		modules.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 		frame.getContentPane().add(modules,BorderLayout.PAGE_START);
 		
-		more = new JButton("Többet a modulról");
+		more = new JButton("Tï¿½bbet a modulrï¿½l");
 		more.setPreferredSize(new Dimension(150,150));
 		frame.getContentPane().add(more,BorderLayout.LINE_START);
 		
-		start = new JButton("Indítás");
+		start = new JButton("IndÃ­tÃ¡s");
 		start.setBackground(Color.CYAN);
 		start.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				if(modules.getSelectedItem().toString() != "Válassz modult!") {
+				if(modules.getSelectedItem().toString() != "Vï¿½lassz modult!") {
 					frame.dispose();
 					Coordinator.openApplication(modules.getSelectedItem().toString());
 				}
@@ -69,11 +69,11 @@ public class MainWindow {
 		});
 		frame.getContentPane().add(start,BorderLayout.CENTER);
 		
-		about = new JButton("A Programról");
+		about = new JButton("A Programrï¿½l");
 		about.setPreferredSize(new Dimension(150,150));
 		frame.getContentPane().add(about,BorderLayout.LINE_END);
 		
-		exit = new JButton("Kilépés");
+		exit = new JButton("Kilï¿½pï¿½s");
 		exit.setBackground(Color.RED);
 		exit.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 		exit.addActionListener(new ActionListener() {

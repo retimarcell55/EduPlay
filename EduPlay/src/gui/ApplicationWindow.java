@@ -96,7 +96,7 @@ public class ApplicationWindow {
 			tmp.addActionListener(new ActionListener() {
 			    public void actionPerformed(ActionEvent ev) {
 			    	Coordinator.appmodule.setExercise(tmp.getText().toString());
-			    	actualexercisename.setText("   Aktuális feladat: " + Coordinator.appmodule.getactualExercise().toString());
+			    	actualexercisename.setText("   Aktualis feladat: " + Coordinator.appmodule.getactualExercise().toString());
 			    }
 			});
 			exercisemenuitems.add(tmp);
@@ -104,32 +104,32 @@ public class ApplicationWindow {
 			exercisemenu.add(tmp);
 		}
 		
-		description = new JButton("Aktuális feladat leírása");
+		description = new JButton("Aktuï¿½lis feladat leï¿½rï¿½sa");
 		description.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(frame, Coordinator.appmodule.getDescription(), "Feladatleírás",
+				JOptionPane.showMessageDialog(frame, Coordinator.appmodule.getDescription(), "Feladatleï¿½rï¿½s",
 						JOptionPane.INFORMATION_MESSAGE);
 			}
 			
 		});
 		
-		help = new JButton("Segítség");
+		help = new JButton("Segï¿½tsï¿½g");
 		help.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(frame, Coordinator.appmodule.getHelp(), "Segítség",
+				JOptionPane.showMessageDialog(frame, Coordinator.appmodule.getHelp(), "Segï¿½tsï¿½g",
 						JOptionPane.INFORMATION_MESSAGE);
 			}
 			
 		});
 		
-		actualexercisename = new JLabel("Aktuális feladat: " + Coordinator.appmodule.getactualExercise().toString());
+		actualexercisename = new JLabel("Aktuï¿½lis feladat: " + Coordinator.appmodule.getactualExercise().toString());
 		actualexercisename.setBorder(new EmptyBorder(0, 0, 0, 100));
 		
-		function = new JButton("Függvények");
+		function = new JButton("Fï¿½ggvï¿½nyek");
 		function.addActionListener(new ActionListener() {
 
 			@Override
@@ -179,7 +179,7 @@ public class ApplicationWindow {
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		inputpanel.add(scrolli, BorderLayout.CENTER);
 
-		compile = new JButton("Fordítás");
+		compile = new JButton("Fordï¿½tï¿½s");
 		compile.addActionListener(new ActionListener() {
 
 			@Override
@@ -236,13 +236,13 @@ public class ApplicationWindow {
 
 		settingspanel = new JPanel(new BorderLayout());
 
-		rules = new JButton("Szabályok");
+		rules = new JButton("Szabï¿½lyok");
 		rules.setPreferredSize(new Dimension(250, 50));
 		rules.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(frame, Coordinator.appmodule.getRules(), "Szabályok",
+				JOptionPane.showMessageDialog(frame, Coordinator.appmodule.getRules(), "Szabï¿½lyok",
 						JOptionPane.INFORMATION_MESSAGE);
 			}
 
@@ -261,7 +261,7 @@ public class ApplicationWindow {
 		});
 		settingspanel.add(API, BorderLayout.CENTER);
 
-		exit = new JButton("Kilépés");
+		exit = new JButton("Kilï¿½pï¿½s");
 		exit.setPreferredSize(new Dimension(250, 50));
 		exit.addActionListener(new ActionListener() {
 
