@@ -1,0 +1,12 @@
+﻿Több szereplős bash
+Az appwindow fejlesztése, pl több player, nehézség, életek száma stb
+modulok illesztése?
+milyen függvények érhetők el
+UML diagram
+Standard IO kiirtása
+a play elcsesz mindent?
+compile - val kapcsolatos dolgok kiszervezése
+kompetitív szellem? mennyi játékot kell megnyerni?
+Játékos profil, a játék rá tud tanulni egy player játékára
+elszállásokat kivezetni!
+külön helper class amibe függvényeket lehet gyártani?

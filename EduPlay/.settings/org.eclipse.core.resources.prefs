@@ -1,0 +1,8 @@
+eclipse.preferences.version=1
+encoding//src/connection/Coordinator.java=UTF-8
+encoding//src/module/ApplicationModule.java=UTF-8
+encoding//src/module/games/bash/Bash.java=UTF-8
+encoding//src/module/games/bash/BashInterface.java=UTF-8
+encoding//src/module/games/escape/Escape.java=UTF-8
+encoding//src/module/games/escape/EscapeInterface.java=UTF-8
+encoding//src/module/games/escape/ZombieEntity.java=UTF-8
