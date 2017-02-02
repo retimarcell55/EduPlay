@@ -10,7 +10,7 @@
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Downloads/autocomplete-2.5.8.jar!/" />
+          <root url="jar://$MODULE_DIR$/libs/autocomplete-2.5.8.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -19,7 +19,7 @@
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Downloads/rsyntaxtextarea-2.5.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/libs/rsyntaxtextarea-2.5.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
