@@ -1,84 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6d391f8a-1c26-4ada-b32a-e914972f0f0b" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/connection/Callable.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/connection/Coordinator$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/connection/Coordinator$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/connection/Coordinator$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/connection/Coordinator.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/gui/ApplicationWindow$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/gui/ApplicationWindow$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/gui/ApplicationWindow$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/gui/ApplicationWindow$4$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/gui/ApplicationWindow$4.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/gui/ApplicationWindow$5.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/gui/ApplicationWindow$6.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/gui/ApplicationWindow$7.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/gui/ApplicationWindow$8.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/gui/ApplicationWindow.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/gui/FunctionWindow$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/gui/FunctionWindow.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/gui/MainWindow$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/gui/MainWindow$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/gui/MainWindow.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/module/ApplicationModule.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/module/games/bash/Bash$State.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/module/games/bash/Bash.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/module/games/bash/BashInterface.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/module/games/escape/Entity$Position.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/module/games/escape/Entity.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/module/games/escape/Environment.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/module/games/escape/Escape$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/module/games/escape/Escape$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/module/games/escape/Escape.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/module/games/escape/EscapeInterface.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/module/games/escape/Exit.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/module/games/escape/GameWindow$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/module/games/escape/GameWindow.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/module/games/escape/PlayerEntity.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/module/games/escape/Wall.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/module/games/escape/ZombieEntity$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/module/games/escape/ZombieEntity.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/connection/Callable.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/connection/Coordinator$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/connection/Coordinator$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/connection/Coordinator$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/connection/Coordinator.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/gui/ApplicationWindow$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/gui/ApplicationWindow$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/gui/ApplicationWindow$3.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/gui/ApplicationWindow$4$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/gui/ApplicationWindow$4.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/gui/ApplicationWindow$5.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/gui/ApplicationWindow$6.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/gui/ApplicationWindow$7.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/gui/ApplicationWindow$8.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/gui/ApplicationWindow.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/gui/FunctionWindow$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/gui/FunctionWindow.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/gui/MainWindow$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/gui/MainWindow$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/gui/MainWindow.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/module/ApplicationModule.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/module/games/bash/Bash$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/module/games/bash/Bash$State.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/module/games/bash/Bash.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/module/games/bash/BashInterface.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/module/games/escape/Entity$Position.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/module/games/escape/Entity.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/module/games/escape/Environment.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/module/games/escape/Escape$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/module/games/escape/Escape$2.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/module/games/escape/Escape.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/module/games/escape/EscapeInterface.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/module/games/escape/Exit.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/module/games/escape/GameWindow$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/module/games/escape/GameWindow.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/module/games/escape/PlayerEntity.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/module/games/escape/Wall.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/module/games/escape/ZombieEntity$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/EduPlay/module/games/escape/ZombieEntity.class" afterPath="" />
+    <list default="true" id="6d391f8a-1c26-4ada-b32a-e914972f0f0b" name="Default" comment="Remove bin and out">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -558,7 +481,14 @@
       <option name="project" value="LOCAL" />
       <updated>1486052690825</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Remove bin and out">
+      <created>1486122329328</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1486122329328</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -600,7 +530,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Proba" />
-    <option name="LAST_COMMIT_MESSAGE" value="Proba" />
+    <MESSAGE value="Remove bin and out" />
+    <option name="LAST_COMMIT_MESSAGE" value="Remove bin and out" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
