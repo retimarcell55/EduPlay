@@ -4,8 +4,8 @@ import module.ApplicationModule;
 
 public interface Callable {
 	
-	public void yourTurn();
+	void playerTurn();
 	
-	public <T extends ApplicationModule> void initialize(T app);
+	<T extends ApplicationModule> void initializeSelectedModule(T app);
 	
 }

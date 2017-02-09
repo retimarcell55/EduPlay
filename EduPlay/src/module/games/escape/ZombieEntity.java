@@ -2,7 +2,6 @@ package module.games.escape;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Random;
@@ -93,7 +92,7 @@ public class ZombieEntity extends Entity {
 					// A lehetséges lépések közűl kiválaszt egyet random (amik a
 					// legrövidebb úthoz tartoznak)
 					int whichstep = rnd.nextInt(possiblesteps.size());
-					Coordinator.appwindow.outputMessage(getName() + " lépése: (" + getPosrow() + "," + getPoscolumn()
+					Coordinator.appWindow.outputMessage(getName() + " lépése: (" + getPosrow() + "," + getPoscolumn()
 							+ ") -> (" + possiblesteps.get(whichstep).row + "," + possiblesteps.get(whichstep).col +")");
 					this.posrow = possiblesteps.get(whichstep).row;
 					this.poscolumn = possiblesteps.get(whichstep).col;

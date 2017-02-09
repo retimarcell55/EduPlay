@@ -1,8 +1,6 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 
@@ -15,16 +13,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.JTextPane;
 
-import java.awt.GridLayout;
 import java.awt.Toolkit;
 
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
@@ -32,7 +25,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
-import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import connection.Coordinator;
@@ -42,95 +34,94 @@ import org.fife.ui.autocomplete.BasicCompletion;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
 import org.fife.ui.rsyntaxtextarea.*;
-import org.fife.ui.rtextarea.*;
 
 
 public class ApplicationWindow {
 
-	private JFrame frame;
+	private JFrame mainFrame;
 	private JButton compile;
-	private JPanel inputpanel;
-	private JPanel outputpanel;
-	private JPanel settingspanel;
-	private JPanel panel;
-	private RSyntaxTextArea input;
-	private JTextArea output;
-	private JLabel inputlabel;
-	private JLabel outputlabel;
-	private JButton rules;
-	private JButton API;
-	private JButton exit;
+	private JPanel inputPanel;
+	private JPanel outputPanel;
+	private JPanel settingsPanel;
+	private JPanel mainPanel;
+	private RSyntaxTextArea inputTextField;
+	private JTextArea outputTextField;
+	private JLabel inputLabel;
+	private JLabel outputLabel;
+	private JButton rulesButton;
+	private JButton apiButton;
+	private JButton exitButton;
 	
-	JMenuBar menubar;
-	JMenu exercisemenu;
-	JButton description;
-	JButton help;
-	JLabel actualexercisename;
-	JButton function;
+	JMenuBar mainMenuBar;
+	JMenu exerciseMenu;
+	JButton descriptionButton;
+	JButton helpButton;
+	JLabel selectedExerciseLabel;
+	JButton functionButton;
 	ArrayList<String> exercises;
-	ArrayList<JMenuItem> exercisemenuitems;
+	ArrayList<JMenuItem> exerciseMenuItems;
 	
-	JScrollPane scrolli;
-	JScrollPane scrollo;
+	JScrollPane inputScrollPane;
+	JScrollPane outputScrollPane;
 
 	public ApplicationWindow() {
 		initialize();
 	}
 
 	private void initialize() {
-		frame = new JFrame();
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		frame.setBounds(dim.width/2-1000/2, dim.height/2-800/2, 1000, 800);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setTitle(Coordinator.appmodule.getName());
-		frame.setResizable(true);
+		mainFrame = new JFrame();
+		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+		mainFrame.setBounds(dimension.width/2-1000/2, dimension.height/2-800/2, 1000, 800);
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainFrame.setTitle(Coordinator.appModule.getName());
+		mainFrame.setResizable(true);
 		
-		menubar = new JMenuBar();
-		exercisemenu = new JMenu("Feladatok");
+		mainMenuBar = new JMenuBar();
+		exerciseMenu = new JMenu("Feladatok");
 		
-		exercises = Coordinator.appmodule.getExercises();
-		exercisemenuitems = new ArrayList<JMenuItem>();
+		exercises = Coordinator.appModule.getExercises();
+		exerciseMenuItems = new ArrayList<JMenuItem>();
 		
-		for(String item : exercises) {
-			JMenuItem tmp = new JMenuItem(item); 
-			tmp.addActionListener(new ActionListener() {
+		for(String exercise : exercises) {
+			JMenuItem newMenuItem = new JMenuItem(exercise);
+			newMenuItem.addActionListener(new ActionListener() {
 			    public void actionPerformed(ActionEvent ev) {
-			    	Coordinator.appmodule.setExercise(tmp.getText().toString());
-			    	actualexercisename.setText("   Aktualis feladat: " + Coordinator.appmodule.getactualExercise().toString());
+			    	Coordinator.appModule.setExercise(newMenuItem.getText().toString());
+			    	selectedExerciseLabel.setText("   Aktualis feladat: " + Coordinator.appModule.getSelectedExercise().toString());
 			    }
 			});
-			exercisemenuitems.add(tmp);
+			exerciseMenuItems.add(newMenuItem);
 			
-			exercisemenu.add(tmp);
+			exerciseMenu.add(newMenuItem);
 		}
 		
-		description = new JButton("Aktu�lis feladat le�r�sa");
-		description.addActionListener(new ActionListener() {
+		descriptionButton = new JButton("Aktu�lis feladat le�r�sa");
+		descriptionButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(frame, Coordinator.appmodule.getDescription(), "Feladatle�r�s",
+				JOptionPane.showMessageDialog(mainFrame, Coordinator.appModule.getDescription(), "Feladatle�r�s",
 						JOptionPane.INFORMATION_MESSAGE);
 			}
 			
 		});
 		
-		help = new JButton("Seg�ts�g");
-		help.addActionListener(new ActionListener() {
+		helpButton = new JButton("Seg�ts�g");
+		helpButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(frame, Coordinator.appmodule.getHelp(), "Seg�ts�g",
+				JOptionPane.showMessageDialog(mainFrame, Coordinator.appModule.getHelp(), "Seg�ts�g",
 						JOptionPane.INFORMATION_MESSAGE);
 			}
 			
 		});
 		
-		actualexercisename = new JLabel("Aktu�lis feladat: " + Coordinator.appmodule.getactualExercise().toString());
-		actualexercisename.setBorder(new EmptyBorder(0, 0, 0, 100));
+		selectedExerciseLabel = new JLabel("Aktu�lis feladat: " + Coordinator.appModule.getSelectedExercise().toString());
+		selectedExerciseLabel.setBorder(new EmptyBorder(0, 0, 0, 100));
 		
-		function = new JButton("F�ggv�nyek");
-		function.addActionListener(new ActionListener() {
+		functionButton = new JButton("F�ggv�nyek");
+		functionButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -138,7 +129,7 @@ public class ApplicationWindow {
 				EventQueue.invokeLater(new Runnable() {
 					public void run() {
 						try {
-							FunctionWindow fw = new FunctionWindow();
+							FunctionWindow functionWindow = new FunctionWindow();
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -149,35 +140,35 @@ public class ApplicationWindow {
 			
 		});
 
-		menubar.add(exercisemenu);
-		menubar.add(description);
-		menubar.add(help);
-		menubar.add(function);
-		menubar.add(Box.createHorizontalGlue());
-		menubar.add(actualexercisename);
-		frame.setJMenuBar(menubar);
+		mainMenuBar.add(exerciseMenu);
+		mainMenuBar.add(descriptionButton);
+		mainMenuBar.add(helpButton);
+		mainMenuBar.add(functionButton);
+		mainMenuBar.add(Box.createHorizontalGlue());
+		mainMenuBar.add(selectedExerciseLabel);
+		mainFrame.setJMenuBar(mainMenuBar);
 
-		panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+		mainPanel = new JPanel();
+		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
 
-		inputpanel = new JPanel(new BorderLayout());
-		inputpanel.setPreferredSize(new Dimension(1000, 300));
+		inputPanel = new JPanel(new BorderLayout());
+		inputPanel.setPreferredSize(new Dimension(1000, 300));
 
-		inputlabel = new JLabel("Bemenet:");
-		inputpanel.add(inputlabel, BorderLayout.PAGE_START);
+		inputLabel = new JLabel("Bemenet:");
+		inputPanel.add(inputLabel, BorderLayout.PAGE_START);
 		
 		CompletionProvider provider = createCompletionProvider();
 		AutoCompletion ac = new AutoCompletion(provider);
 		
-		input = new RSyntaxTextArea();
-		input.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
-		input.setCodeFoldingEnabled(true);
+		inputTextField = new RSyntaxTextArea();
+		inputTextField.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
+		inputTextField.setCodeFoldingEnabled(true);
 		
-		ac.install(input);
+		ac.install(inputTextField);
 		
-		scrolli = new JScrollPane(input, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+		inputScrollPane = new JScrollPane(inputTextField, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		inputpanel.add(scrolli, BorderLayout.CENTER);
+		inputPanel.add(inputScrollPane, BorderLayout.CENTER);
 
 		compile = new JButton("Ford�t�s");
 		compile.addActionListener(new ActionListener() {
@@ -187,9 +178,9 @@ public class ApplicationWindow {
 					
 				BufferedWriter writer;
 				try {
-					if((!input.getText().trim().equals(""))) {
-						writer = new BufferedWriter(new FileWriter(Coordinator.filesource + "/Player.txt", false));
-						input.write(writer);
+					if((!inputTextField.getText().trim().equals(""))) {
+						writer = new BufferedWriter(new FileWriter(Coordinator.FILE_SOURCE + "/Player.txt", false));
+						inputTextField.write(writer);
 						writer.close();
 					}
 				} catch (IOException e1) {
@@ -198,7 +189,7 @@ public class ApplicationWindow {
 				}
 				
 				try {
-					Coordinator.compile(input.getText().toString());
+					Coordinator.compile(inputTextField.getText().toString());
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -216,94 +207,94 @@ public class ApplicationWindow {
 			}
 
 		});
-		inputpanel.add(compile, BorderLayout.PAGE_END);
+		inputPanel.add(compile, BorderLayout.PAGE_END);
 
-		panel.add(inputpanel);
+		mainPanel.add(inputPanel);
 
-		outputpanel = new JPanel(new BorderLayout());
-		outputpanel.setPreferredSize(new Dimension(1000, 300));
+		outputPanel = new JPanel(new BorderLayout());
+		outputPanel.setPreferredSize(new Dimension(1000, 300));
 
-		outputlabel = new JLabel("Kimenet:");
-		outputpanel.add(outputlabel, BorderLayout.PAGE_START);
+		outputLabel = new JLabel("Kimenet:");
+		outputPanel.add(outputLabel, BorderLayout.PAGE_START);
 
-		output = new JTextArea();
-		output.setEditable(false);
-		scrollo = new JScrollPane(output, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+		outputTextField = new JTextArea();
+		outputTextField.setEditable(false);
+		outputScrollPane = new JScrollPane(outputTextField, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		outputpanel.add(scrollo, BorderLayout.CENTER);
+		outputPanel.add(outputScrollPane, BorderLayout.CENTER);
 
-		panel.add(outputpanel);
+		mainPanel.add(outputPanel);
 
-		settingspanel = new JPanel(new BorderLayout());
+		settingsPanel = new JPanel(new BorderLayout());
 
-		rules = new JButton("Szab�lyok");
-		rules.setPreferredSize(new Dimension(250, 50));
-		rules.addActionListener(new ActionListener() {
+		rulesButton = new JButton("Szab�lyok");
+		rulesButton.setPreferredSize(new Dimension(250, 50));
+		rulesButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(frame, Coordinator.appmodule.getRules(), "Szab�lyok",
+				JOptionPane.showMessageDialog(mainFrame, Coordinator.appModule.getRules(), "Szab�lyok",
 						JOptionPane.INFORMATION_MESSAGE);
 			}
 
 		});
-		settingspanel.add(rules, BorderLayout.LINE_START);
+		settingsPanel.add(rulesButton, BorderLayout.LINE_START);
 
-		API = new JButton("API");
-		API.addActionListener(new ActionListener() {
+		apiButton = new JButton("API");
+		apiButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(frame, Coordinator.appmodule.getAPI(), "API",
+				JOptionPane.showMessageDialog(mainFrame, Coordinator.appModule.getApi(), "API",
 						JOptionPane.INFORMATION_MESSAGE);
 			}
 
 		});
-		settingspanel.add(API, BorderLayout.CENTER);
+		settingsPanel.add(apiButton, BorderLayout.CENTER);
 
-		exit = new JButton("Kil�p�s");
-		exit.setPreferredSize(new Dimension(250, 50));
-		exit.addActionListener(new ActionListener() {
+		exitButton = new JButton("Kil�p�s");
+		exitButton.setPreferredSize(new Dimension(250, 50));
+		exitButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				frame.dispose();
-				Coordinator.returning();
+				mainFrame.dispose();
+				Coordinator.returnFromApplicationWindow();
 			}
 
 		});
-		settingspanel.add(exit, BorderLayout.LINE_END);
+		settingsPanel.add(exitButton, BorderLayout.LINE_END);
 
-		panel.add(settingspanel);
+		mainPanel.add(settingsPanel);
 
-		frame.getContentPane().add(panel, BorderLayout.CENTER);
+		mainFrame.getContentPane().add(mainPanel, BorderLayout.CENTER);
 
-		frame.setVisible(true);
+		mainFrame.setVisible(true);
 		
 	}
 
 	public void outputMessage(String message) {
-		output.append(message + "\n");
+		outputTextField.append(message + "\n");
 	}
 
 	public void clearMessage() {
-		output.setText("");
+		outputTextField.setText("");
 	}
 	
 	private CompletionProvider createCompletionProvider() {
-	      DefaultCompletionProvider provider = new DefaultCompletionProvider();
+	      DefaultCompletionProvider completionProvider = new DefaultCompletionProvider();
 
-	      provider.addCompletion(new BasicCompletion(provider, "if() {}"));
-	      provider.addCompletion(new BasicCompletion(provider, "else if() {}"));
-	      provider.addCompletion(new BasicCompletion(provider, "while(true) {}"));
-	      provider.addCompletion(new BasicCompletion(provider, "else {}"));
-	      provider.addCompletion(new BasicCompletion(provider, "int"));
-	      provider.addCompletion(new BasicCompletion(provider, "String"));
-	      provider.addCompletion(new BasicCompletion(provider, "for(int i = 0 ; i < length; i++) {}"));
-	      provider.addCompletion(new BasicCompletion(provider, "String"));
+	      completionProvider.addCompletion(new BasicCompletion(completionProvider, "if() {}"));
+	      completionProvider.addCompletion(new BasicCompletion(completionProvider, "else if() {}"));
+	      completionProvider.addCompletion(new BasicCompletion(completionProvider, "while(true) {}"));
+	      completionProvider.addCompletion(new BasicCompletion(completionProvider, "else {}"));
+	      completionProvider.addCompletion(new BasicCompletion(completionProvider, "int"));
+	      completionProvider.addCompletion(new BasicCompletion(completionProvider, "String"));
+	      completionProvider.addCompletion(new BasicCompletion(completionProvider, "for(int i = 0 ; i < length; i++) {}"));
+	      completionProvider.addCompletion(new BasicCompletion(completionProvider, "String"));
 
-	      return provider;
+	      return completionProvider;
 
 	   }
 	

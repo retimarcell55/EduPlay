@@ -6,28 +6,26 @@ import connection.Callable;
 
 public interface ApplicationModule {
 
-	public String getName();
+	String getName();
 
-	public String getRules();
+	String getRules();
 
-	public String getAPI();
+	String getApi();
 	
-	public String getDescription();
+	String getDescription();
 	
-	public String getHelp();
+	String getHelp();
 
-	// A játékot lebonyolító függvény
-	public void play();
-	
-	// Kiírathatunk a program output mezőjébe, amit szeretnénk
-	public void print(String s);
+	void playSelectedExercise();
+
+	void print(String s);
 	
 	//----------ezeket nem hívhatja meg a felhasználó, de egyelőre így marad------------
 	
-	public ArrayList<String> getExercises();
+	ArrayList<String> getExercises();
 	
-	public void setExercise(String ex);
+	void setExercise(String exercise);
 	
-	public String getactualExercise();
+	String getSelectedExercise();
 
 }

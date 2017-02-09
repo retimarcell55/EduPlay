@@ -1,6 +1,5 @@
 package module.games.escape;
 
-import java.awt.EventQueue;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -8,17 +7,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Random;
 
-import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
 import connection.Callable;
 import connection.Coordinator;
-import gui.MainWindow;
 import module.games.escape.Entity.Position;
 
 public class Escape implements EscapeInterface {
@@ -64,7 +60,7 @@ public class Escape implements EscapeInterface {
 		playerturnend = false;
 		maxturn = 50;
 
-		Coordinator.appwindow.clearMessage();
+		Coordinator.appWindow.clearMessage();
 		entities = new ArrayList<Entity>();
 		environmentobjects = new ArrayList<Environment>();
 
@@ -92,7 +88,7 @@ public class Escape implements EscapeInterface {
 			FileReader fileReader = null;
 			PlayerEntity hero = null;
 			try {
-				fileReader = new FileReader(new File(Coordinator.filesource + "/Test.txt"));
+				fileReader = new FileReader(new File(Coordinator.FILE_SOURCE + "/Test.txt"));
 
 				BufferedReader br = new BufferedReader(fileReader);
 
@@ -135,9 +131,9 @@ public class Escape implements EscapeInterface {
 				br.close();
 
 			} catch (FileNotFoundException e) {
-				Coordinator.appwindow.outputMessage(e.getMessage());
+				Coordinator.appWindow.outputMessage(e.getMessage());
 			} catch (IOException e) {
-				Coordinator.appwindow.outputMessage(e.getMessage());
+				Coordinator.appWindow.outputMessage(e.getMessage());
 			}
 		}
 		gameboard = new char[boardheight][boardwidth];
@@ -175,7 +171,7 @@ public class Escape implements EscapeInterface {
 	}
 
 	@Override
-	public String getAPI() {
+	public String getApi() {
 		String tmp = "";
 		if (actualexercise == "Hol van a zombi? <ciklus , mátrixkezelés>") {
 			tmp = "char[][] getBoard() -> A pálya karakter mátrixát kérhetjük le a függvénnyel\n"
@@ -290,12 +286,12 @@ public class Escape implements EscapeInterface {
 	}
 
 	@Override
-	public void play() {
+	public void playSelectedExercise() {
 
 		initialize();
 
 		this.player = Coordinator.player;
-		player.initialize(this);
+		player.initializeSelectedModule(this);
 
 		// JÁTÉKCIKLUS!
 		new SwingWorker() {
@@ -316,7 +312,7 @@ public class Escape implements EscapeInterface {
 
 		}.execute();
 		if (runtimeerror) {
-			Coordinator.appwindow.outputMessage("FUTÁS IDEJŰ HIBA TÖRTÉNT, A JÁTÉK LEÁLL!");
+			Coordinator.appWindow.outputMessage("FUTÁS IDEJŰ HIBA TÖRTÉNT, A JÁTÉK LEÁLL!");
 			return;
 		}
 
@@ -334,7 +330,7 @@ public class Escape implements EscapeInterface {
 
 	@Override
 	public void print(String s) {
-		Coordinator.appwindow.outputMessage("<PLAYER> " + s);
+		Coordinator.appWindow.outputMessage("<PLAYER> " + s);
 
 	}
 
@@ -344,9 +340,9 @@ public class Escape implements EscapeInterface {
 	}
 
 	@Override
-	public void setExercise(String ex) {
+	public void setExercise(String exercise) {
 		for (String item : exercises) {
-			if (item == ex) {
+			if (item == exercise) {
 				actualexercise = item;
 			}
 		}
@@ -354,7 +350,7 @@ public class Escape implements EscapeInterface {
 	}
 
 	@Override
-	public String getactualExercise() {
+	public String getSelectedExercise() {
 		return actualexercise;
 	}
 
@@ -450,19 +446,19 @@ public class Escape implements EscapeInterface {
 
 		} else {
 			if (playerturnend) {
-				Coordinator.appwindow.outputMessage("<JÁTÉK> A karaktered ebben a körben már cselekedett!");
+				Coordinator.appWindow.outputMessage("<JÁTÉK> A karaktered ebben a körben már cselekedett!");
 				return;
 			}
 
 			if (!isOnTheBoard(row, column)) {
-				Coordinator.appwindow.outputMessage("<JÁTÉK> A lépés kimutat a játéktérből!");
+				Coordinator.appWindow.outputMessage("<JÁTÉK> A lépés kimutat a játéktérből!");
 			} else if (!isOneMove(entities.get(0), row, column)) {
-				Coordinator.appwindow.outputMessage("<JÁTÉK> A lépés nem egy mezőre volt az aktuális pozíciódtól!");
+				Coordinator.appWindow.outputMessage("<JÁTÉK> A lépés nem egy mezőre volt az aktuális pozíciódtól!");
 			} else if (gameboard[row][column] == 'w') {
-				Coordinator.appwindow.outputMessage("Falon nem tudsz átmenni!");
+				Coordinator.appWindow.outputMessage("Falon nem tudsz átmenni!");
 			} else {
 				playerturnend = true;
-				Coordinator.appwindow
+				Coordinator.appWindow
 						.outputMessage(entities.get(0).getName() + " lépése: (" + entities.get(0).getPosrow() + ","
 								+ entities.get(0).getPoscolumn() + ") -> (" + row + "," + column + ")");
 				entities.get(0).setPosrow(row);
@@ -475,28 +471,28 @@ public class Escape implements EscapeInterface {
 	public void sprintToCell(int row, int column) {
 
 		if (playerturnend) {
-			Coordinator.appwindow.outputMessage("<JÁTÉK> A karaktered ebben a körben már cselekedett!");
+			Coordinator.appWindow.outputMessage("<JÁTÉK> A karaktered ebben a körben már cselekedett!");
 			return;
 		}
 
 		PlayerEntity hero = (PlayerEntity) entities.get(0);
 
 		if (hero.getSprint() <= 0) {
-			Coordinator.appwindow.outputMessage("<JÁTÉK> A karaktered nem tud többet sprintelni!");
+			Coordinator.appWindow.outputMessage("<JÁTÉK> A karaktered nem tud többet sprintelni!");
 			return;
 		}
 
 		if (!isOnTheBoard(row, column)) {
-			Coordinator.appwindow.outputMessage("<JÁTÉK> A lépés kimutat a játéktérből!");
+			Coordinator.appWindow.outputMessage("<JÁTÉK> A lépés kimutat a játéktérből!");
 		} else if (!isTwoMove(entities.get(0), row, column)) {
-			Coordinator.appwindow.outputMessage("<JÁTÉK> A lépés nem egy mezőre volt az aktuális pozíciódtól!");
+			Coordinator.appWindow.outputMessage("<JÁTÉK> A lépés nem egy mezőre volt az aktuális pozíciódtól!");
 		} else if (gameboard[row][column] == 'w') {
-			Coordinator.appwindow.outputMessage("<JÁTÉK> Falon nem tudsz átmenni!");
+			Coordinator.appWindow.outputMessage("<JÁTÉK> Falon nem tudsz átmenni!");
 		} else {
 			playerturnend = true;
 			hero.setSprint(hero.getSprint() - 1);
-			Coordinator.appwindow.outputMessage("<JÁTÉK> elhasználtál egy sprintelési lehetőséget!");
-			Coordinator.appwindow.outputMessage(entities.get(0).getName() + " lépése: (" + entities.get(0).getPosrow()
+			Coordinator.appWindow.outputMessage("<JÁTÉK> elhasználtál egy sprintelési lehetőséget!");
+			Coordinator.appWindow.outputMessage(entities.get(0).getName() + " lépése: (" + entities.get(0).getPosrow()
 					+ "," + entities.get(0).getPoscolumn() + ") -> (" + row + "," + column + ")");
 			entities.get(0).setPosrow(row);
 			entities.get(0).setPoscolumn(column);
@@ -521,11 +517,11 @@ public class Escape implements EscapeInterface {
 			}
 
 			turncount++;
-			Coordinator.appwindow.outputMessage("<JÁTÉK> " + turncount + ". kör");
+			Coordinator.appWindow.outputMessage("<JÁTÉK> " + turncount + ". kör");
 			try {
-				player.yourTurn();
+				player.playerTurn();
 			} catch (Exception ex) {
-				Coordinator.appwindow.outputMessage(ex.toString());
+				Coordinator.appWindow.outputMessage(ex.toString());
 				runtimeerror = true;
 				break;
 			}
@@ -543,13 +539,13 @@ public class Escape implements EscapeInterface {
 				e.printStackTrace();
 			}
 
-			Coordinator.appwindow.outputMessage("");
+			Coordinator.appWindow.outputMessage("");
 
 			if (isPlayerEaten()) {
-				Coordinator.appwindow.outputMessage("<JÁTÉK> A játékost egy zombi megharapta! VÉGE A JÁTÉKNAK");
+				Coordinator.appWindow.outputMessage("<JÁTÉK> A játékost egy zombi megharapta! VÉGE A JÁTÉKNAK");
 				break;
 			} else if (isExitReached()) {
-				Coordinator.appwindow.outputMessage("<JÁTÉK> A játékos eljutott a kijárathoz! MEGMENEKÜLTÉL");
+				Coordinator.appWindow.outputMessage("<JÁTÉK> A játékos eljutott a kijárathoz! MEGMENEKÜLTÉL");
 				break;
 			}
 		}
@@ -577,11 +573,11 @@ public class Escape implements EscapeInterface {
 			fillBoard();
 			gamewindow.drawBoard(gameboard);
 
-			Coordinator.appwindow.outputMessage("<JÁTÉK> " + turncount + ". kör");
+			Coordinator.appWindow.outputMessage("<JÁTÉK> " + turncount + ". kör");
 			try {
-				player.yourTurn();
+				player.playerTurn();
 			} catch (Exception ex) {
-				Coordinator.appwindow.outputMessage(ex.toString());
+				Coordinator.appWindow.outputMessage(ex.toString());
 				runtimeerror = true;
 				break;
 			}
@@ -593,25 +589,25 @@ public class Escape implements EscapeInterface {
 				e.printStackTrace();
 			}
 
-			Coordinator.appwindow.outputMessage(
+			Coordinator.appWindow.outputMessage(
 					"<JÁTÉK> A zombi szerinted a (" + zombiposrow + "," + zombiposcolumn + ") helyen tartózkodik!");
-			Coordinator.appwindow.outputMessage("<JÁTÉK> A zombi a (" + entities.get(0).getPosrow() + ","
+			Coordinator.appWindow.outputMessage("<JÁTÉK> A zombi a (" + entities.get(0).getPosrow() + ","
 					+ entities.get(0).getPoscolumn() + ") helyen tartózkodik!");
 			if (zombiposrow == entities.get(0).getPosrow() && zombiposcolumn == entities.get(0).getPoscolumn()) {
-				Coordinator.appwindow.outputMessage("<JÁTÉK> Igazad volt!");
+				Coordinator.appWindow.outputMessage("<JÁTÉK> Igazad volt!");
 				correct++;
 			} else {
-				Coordinator.appwindow.outputMessage("<JÁTÉK> Tévedtél!");
+				Coordinator.appWindow.outputMessage("<JÁTÉK> Tévedtél!");
 			}
 
-			Coordinator.appwindow.outputMessage("");
+			Coordinator.appWindow.outputMessage("");
 		}
-		Coordinator.appwindow.outputMessage(
+		Coordinator.appWindow.outputMessage(
 				"<JÁTÉK> " + 10 + " körből " + correct + " alkalommal találtad el , hogy hol van a zombi!");
 		if (correct == 10) {
-			Coordinator.appwindow.outputMessage("<JÁTÉK> MINDENT ELTALÁLTÁL!");
+			Coordinator.appWindow.outputMessage("<JÁTÉK> MINDENT ELTALÁLTÁL!");
 		} else {
-			Coordinator.appwindow.outputMessage("<JÁTÉK> VALAMI PROBLÉMA VAN MÉG AZ ALGORITMUSSAL!");
+			Coordinator.appWindow.outputMessage("<JÁTÉK> VALAMI PROBLÉMA VAN MÉG AZ ALGORITMUSSAL!");
 		}
 
 	}
@@ -704,11 +700,11 @@ public class Escape implements EscapeInterface {
 		while (turncount != distance) {
 			turncount++;
 			playerturnend = false;
-			Coordinator.appwindow.outputMessage("<JÁTÉK> " + turncount + ". kör");
+			Coordinator.appWindow.outputMessage("<JÁTÉK> " + turncount + ". kör");
 			try {
-				player.yourTurn();
+				player.playerTurn();
 			} catch (Exception ex) {
-				Coordinator.appwindow.outputMessage(ex.toString());
+				Coordinator.appWindow.outputMessage(ex.toString());
 				runtimeerror = true;
 				break;
 			}
@@ -723,14 +719,14 @@ public class Escape implements EscapeInterface {
 				e.printStackTrace();
 			}
 
-			Coordinator.appwindow.outputMessage("");
+			Coordinator.appWindow.outputMessage("");
 		}
 		if (environmentobjects.get(0).getPosrow() == entities.get(0).getPosrow()
 				&& environmentobjects.get(0).getPoscolumn() == entities.get(0).getPoscolumn()) {
-			Coordinator.appwindow.outputMessage(
+			Coordinator.appWindow.outputMessage(
 					"<JÁTÉK> ELJUTOTTÁL A CÉLIG! MEGMENEKÜLTÉL! A legkevesebb lépésszám a célig: " + distance);
 		} else {
-			Coordinator.appwindow.outputMessage(
+			Coordinator.appWindow.outputMessage(
 					"<JÁTÉK> NEM JUTOTTÁL EL A CÉLIG! VESZTETTÉL! A legkevesebb lépésszám a célig: " + distance);
 		}
 	}
@@ -762,7 +758,7 @@ public class Escape implements EscapeInterface {
 	@Override
 	public void axeAttack(String direction) {
 		if (playerturnend) {
-			Coordinator.appwindow.outputMessage("<JÁTÉK> A karaktered ebben a körben már cselekedett!");
+			Coordinator.appWindow.outputMessage("<JÁTÉK> A karaktered ebben a körben már cselekedett!");
 			return;
 		}
 
@@ -771,7 +767,7 @@ public class Escape implements EscapeInterface {
 		int col = hero.getPoscolumn();
 
 		if (hero.getAxe() <= 0) {
-			Coordinator.appwindow.outputMessage("<JÁTÉK> A karakterednek nincs több használható fejszéje!");
+			Coordinator.appWindow.outputMessage("<JÁTÉK> A karakterednek nincs több használható fejszéje!");
 			return;
 		}
 
@@ -804,17 +800,17 @@ public class Escape implements EscapeInterface {
 			col = col - 1;
 
 		} else {
-			Coordinator.appwindow.outputMessage("<JÁTÉK> Fejszecsapásod iránya nem volt értelmezhető!");
+			Coordinator.appWindow.outputMessage("<JÁTÉK> Fejszecsapásod iránya nem volt értelmezhető!");
 			return;
 		}
 
 		if (isOnTheBoard(row, col)) {
 			playerturnend = true;
 			if (gameboard[row][col] == 'z') {
-				Coordinator.appwindow
+				Coordinator.appWindow
 						.outputMessage("<JÁTÉK> Fejszecsapásod teli találat! Egy zombival kevesebb! Amit megadtál: ("
 								+ (row) + "," + col + ")");
-				Coordinator.appwindow.outputMessage("Fejszéid száma egyel csökkent!");
+				Coordinator.appWindow.outputMessage("Fejszéid száma egyel csökkent!");
 				for (Entity entity : entities) {
 					if (entity.getPosrow() == row && entity.getPoscolumn() == col) {
 						entities.remove(entity);
@@ -823,9 +819,9 @@ public class Escape implements EscapeInterface {
 				}
 				hero.setAxe(hero.getAxe() - 1);
 			} else if (gameboard[row][col] == 'w') {
-				Coordinator.appwindow.outputMessage(
+				Coordinator.appWindow.outputMessage(
 						"<JÁTÉK> Fejszecsapásod egy falat talált el! Amit megadtál: (" + (row) + "," + col + ")");
-				Coordinator.appwindow.outputMessage("Fejszéid száma egyel csökkent!");
+				Coordinator.appWindow.outputMessage("Fejszéid száma egyel csökkent!");
 				for (Environment env : environmentobjects) {
 					if (env.getPosrow() == row && env.getPoscolumn() == col) {
 						environmentobjects.remove(env);
@@ -834,11 +830,11 @@ public class Escape implements EscapeInterface {
 				}
 				hero.setAxe(hero.getAxe() - 1);
 			} else {
-				Coordinator.appwindow.outputMessage(
+				Coordinator.appWindow.outputMessage(
 						"<JÁTÉK> Fejszecsapásod semmit sem talált el! Amit megadtál: (" + (row) + "," + col + ")");
 			}
 		} else {
-			Coordinator.appwindow.outputMessage(
+			Coordinator.appWindow.outputMessage(
 					"<JÁTÉK> Fejszecsapásod kimutat a játéktérből! Amit megadtál: (" + (row) + "," + col + ")");
 		}
 
@@ -869,7 +865,7 @@ public class Escape implements EscapeInterface {
 	@Override
 	public void shoot(String direction) {
 		if (playerturnend) {
-			Coordinator.appwindow.outputMessage("<JÁTÉK> A karaktered ebben a körben már cselekedett!");
+			Coordinator.appWindow.outputMessage("<JÁTÉK> A karaktered ebben a körben már cselekedett!");
 			return;
 		}
 
@@ -878,7 +874,7 @@ public class Escape implements EscapeInterface {
 		int col = hero.getPoscolumn();
 
 		if (hero.getAmmo() <= 0) {
-			Coordinator.appwindow.outputMessage("<JÁTÉK> A karakterednek nincs több tölténye a fegyverhez!");
+			Coordinator.appWindow.outputMessage("<JÁTÉK> A karakterednek nincs több tölténye a fegyverhez!");
 			return;
 		}
 
@@ -911,7 +907,7 @@ public class Escape implements EscapeInterface {
 			col = col - 1;
 
 		} else {
-			Coordinator.appwindow.outputMessage("<JÁTÉK> A lövés iránya nem volt értelmezhető!");
+			Coordinator.appWindow.outputMessage("<JÁTÉK> A lövés iránya nem volt értelmezhető!");
 			return;
 		}
 
@@ -921,14 +917,14 @@ public class Escape implements EscapeInterface {
 		int i = row;
 		int j = col;
 		hero.setAmmo(hero.getAmmo() - 1);
-		Coordinator.appwindow.outputMessage("<JÁTÉK> Töltényeid száma egyel csökkent!");
+		Coordinator.appWindow.outputMessage("<JÁTÉK> Töltényeid száma egyel csökkent!");
 		while (true) {
 
 			if (!isOnTheBoard(i, j)) {
-				Coordinator.appwindow.outputMessage("<JÁTÉK> A lövésed semmit sem talált el!");
+				Coordinator.appWindow.outputMessage("<JÁTÉK> A lövésed semmit sem talált el!");
 				break;
 			} else if (gameboard[i][j] == 'z') {
-				Coordinator.appwindow.outputMessage(
+				Coordinator.appWindow.outputMessage(
 						"<JÁTÉK> Lövésed teli találat! Egy zombival kevesebb! A találat helye: (" + i + "," + j + ")");
 
 				for (Entity entity : entities) {
@@ -939,7 +935,7 @@ public class Escape implements EscapeInterface {
 				}
 				break;
 			} else if (gameboard[i][j] == 'w') {
-				Coordinator.appwindow
+				Coordinator.appWindow
 						.outputMessage("<JÁTÉK> Lövésed egy falat talált el! A találat helye: (" + i + "," + j + ")");
 				break;
 			} else {

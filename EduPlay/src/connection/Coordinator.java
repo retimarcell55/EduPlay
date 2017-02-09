@@ -25,28 +25,30 @@ import module.games.escape.Escape;
 
 public class Coordinator {
 
-	static MainWindow window;
-	public static ApplicationWindow appwindow;
-	public static ApplicationModule appmodule;
+	public static final String FILE_SOURCE = "C:/EduPlay";
+
+	static MainWindow mainWindow;
+	public static ApplicationWindow appWindow;
+	public static ApplicationModule appModule;
 	public static Callable player;
-	public static String filesource = "C:/EduPlay";
+
 
 	public static Map<String, String> modules = new HashMap<String, String>();
-	public static String selectedmodule = null;
+	public static String selectedModule = null;
 
 	public static void main(String[] args) {
 
 		modules.put("Bash - Kockajáték", "BashInterface");
 		modules.put("Fuss amíg tudsz", "EscapeInterface");
-		File f = new File(filesource);
-		if (!f.exists()) {
-			new File(filesource).mkdir();
+		File sourceDirectory = new File(FILE_SOURCE);
+		if (!sourceDirectory.exists()) {
+			new File(FILE_SOURCE).mkdir();
 		}
 
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					window = new MainWindow();
+					mainWindow = new MainWindow();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -59,7 +61,7 @@ public class Coordinator {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					appwindow = new ApplicationWindow();
+					appWindow = new ApplicationWindow();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -67,24 +69,24 @@ public class Coordinator {
 		});
 
 		if (selected == "Bash - Kockajáték") {
-			appmodule = new Bash();
-			selectedmodule = "Bash - Kockajáték";
+			appModule = new Bash();
+			selectedModule = "Bash - Kockajáték";
 		} else if (selected == "Fuss amíg tudsz") {
-			appmodule = new Escape();
-			selectedmodule = "Fuss amíg tudsz";
+			appModule = new Escape();
+			selectedModule = "Fuss amíg tudsz";
 		}
 	}
 
-	public static void compile(String code)
+	public static void compile(String playerTurnCode)
 			throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 
-		String helpercode = "";
-		File f = new File(Coordinator.filesource + "/Helper.txt");
-		if (f.exists()) {
+		String playerDeclarationCode = "";
+		File declarationFile = new File(Coordinator.FILE_SOURCE + "/Helper.txt");
+		if (declarationFile.exists()) {
 			try {
-				BufferedReader br = new BufferedReader(new FileReader(Coordinator.filesource + "/Helper.txt"));
+				BufferedReader br = new BufferedReader(new FileReader(Coordinator.FILE_SOURCE + "/Helper.txt"));
 				if (br.readLine() != null) {
-					helpercode = new Scanner(new File(Coordinator.filesource + "/Helper.txt")).useDelimiter("\\Z")
+					playerDeclarationCode = new Scanner(new File(Coordinator.FILE_SOURCE + "/Helper.txt")).useDelimiter("\\Z")
 							.next();
 				}
 			} catch (FileNotFoundException e2) {
@@ -93,15 +95,15 @@ public class Coordinator {
 			}
 		}
 
-		String source = "import module.ApplicationModule;\n " + "import module.games."
-				+ modules.get(selectedmodule).replace("Interface", "").toLowerCase() + "." + modules.get(selectedmodule)
+		String playerClassSourceCode = "import module.ApplicationModule;\n " + "import module.games."
+				+ modules.get(selectedModule).replace("Interface", "").toLowerCase() + "." + modules.get(selectedModule)
 				+ ";\n " + "import connection.Callable; " + "import java.util.*;\n "
-				+ "public class Player implements Callable {\n  " + "private " + modules.get(selectedmodule) + " app;\n "
-				+ helpercode + "\n@Override\n " + "public void yourTurn() {\n " + code + "\n}\n " + "@Override\n "
-				+ "public <T extends ApplicationModule> void initialize( T app) {\n this.app = ("
-				+ modules.get(selectedmodule) + ")app; \n}\n}";
+				+ "public class Player implements Callable {\n  " + "private " + modules.get(selectedModule) + " app;\n "
+				+ playerDeclarationCode + "\n@Override\n " + "public void playerTurn() {\n " + playerTurnCode + "\n}\n " + "@Override\n "
+				+ "public <T extends ApplicationModule> void initializeSelectedModule( T app) {\n this.app = ("
+				+ modules.get(selectedModule) + ")app; \n}\n}";
 
-		OutputStream erroroutput = new OutputStream() {
+		OutputStream errorOutput = new OutputStream() {
 			private StringBuilder sb = new StringBuilder();
 
 			@Override
@@ -115,21 +117,21 @@ public class Coordinator {
 			}
 		};
 
-		File root = new File(filesource);
+		File root = new File(FILE_SOURCE);
 
 		File sourceFile = new File(root, "Player.java");
-		Files.write(sourceFile.toPath(), source.getBytes());
+		Files.write(sourceFile.toPath(), playerClassSourceCode.getBytes());
 
-		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+		JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
 
-		compiler.run(null, null, erroroutput, sourceFile.getPath());
-		if (erroroutput.toString().length() != 0) {
-			appwindow.clearMessage();
-			appwindow.outputMessage(erroroutput.toString());
-		} else if (source.contains("System.in") || source.contains("System.out") || helpercode.contains("import")) {
-			appwindow.clearMessage();
-			appwindow.outputMessage("System.in ,System.out illetve import tiltott karakterláncolatok! Képernyőre kiírás: app.print(String)");
-		} else if (source.contains("app.play(")) {
+		javaCompiler.run(null, null, errorOutput, sourceFile.getPath());
+		if (errorOutput.toString().length() != 0) {
+			appWindow.clearMessage();
+			appWindow.outputMessage(errorOutput.toString());
+		} else if (playerClassSourceCode.contains("System.in") || playerClassSourceCode.contains("System.out") || playerDeclarationCode.contains("import")) {
+			appWindow.clearMessage();
+			appWindow.outputMessage("System.in ,System.out illetve import tiltott karakterláncolatok! Képernyőre kiírás: app.print(String)");
+		} else if (playerClassSourceCode.contains("app.playSelectedExercise(")) {
 
 		} else {
 
@@ -137,13 +139,13 @@ public class Coordinator {
 			Class<?> cls = Class.forName("Player", true, classLoader);
 			Object instance = cls.newInstance();
 			player = (Callable) instance;
-			appmodule.play();
+			appModule.playSelectedExercise();
 		}
 
 	}
 
-	public static void returning() {
-		window = new MainWindow();
+	public static void returnFromApplicationWindow() {
+		mainWindow = new MainWindow();
 	}
 
 }
