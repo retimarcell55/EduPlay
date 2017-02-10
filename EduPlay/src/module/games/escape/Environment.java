@@ -1,27 +1,27 @@
 package module.games.escape;
 
 public abstract class Environment {
-	private int posrow;
-	private int poscolumn;
+	private int positionRow;
+	private int positionColumn;
 	
-	public Environment(int posrow, int poscolumn) {
-		this.setPosrow(posrow);
-		this.setPoscolumn(poscolumn);
+	public Environment(int positionRow, int positionColumn) {
+		this.setPositionRow(positionRow);
+		this.setPositionColumn(positionColumn);
 	}
 
-	public int getPosrow() {
-		return posrow;
+	public int getPositionRow() {
+		return positionRow;
 	}
 
-	public void setPosrow(int posrow) {
-		this.posrow = posrow;
+	public void setPositionRow(int positionRow) {
+		this.positionRow = positionRow;
 	}
 
-	public int getPoscolumn() {
-		return poscolumn;
+	public int getPositionColumn() {
+		return positionColumn;
 	}
 
-	public void setPoscolumn(int poscolumn) {
-		this.poscolumn = poscolumn;
+	public void setPositionColumn(int positionColumn) {
+		this.positionColumn = positionColumn;
 	}
 }

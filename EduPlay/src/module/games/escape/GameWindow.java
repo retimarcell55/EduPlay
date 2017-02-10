@@ -2,7 +2,6 @@ package module.games.escape;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -19,37 +18,32 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import connection.Coordinator;
-
 public class GameWindow{
 	
-	private int labelsize = 70;
-	private JFrame frame;
-	private JLabel[][] board;
-	private JPanel panel;
+	private final int LABEL_SIZE = 70;
+	private JFrame mainFrame;
+	private JLabel[][] gameLabelBoard;
+	private JPanel mainPanel;
 	
-	private BufferedImage zombie;
-	private BufferedImage player;
-	private BufferedImage grass;
-	private BufferedImage exit;
-	private BufferedImage wall;
+	private BufferedImage zombieImage;
+	private BufferedImage playerImage;
+	private BufferedImage grassImage;
+	private BufferedImage exitImage;
+	private BufferedImage wallImage;
 
 	public GameWindow(int row, int column) {
 		super();
 		initialize(row , column);
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	private void initialize(int row , int column) {
-		frame = new JFrame();
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		frame.setResizable(false);
-		frame.getContentPane().setBackground( Color.red );
-		frame.setTitle("Játék ablak");
+		mainFrame = new JFrame();
+		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+		mainFrame.setResizable(false);
+		mainFrame.getContentPane().setBackground( Color.red );
+		mainFrame.setTitle("Jï¿½tï¿½k ablak");
 		
-		frame.addWindowListener(new WindowListener() {
+		mainFrame.addWindowListener(new WindowListener() {
 
 			@Override
 			public void windowOpened(WindowEvent e) {
@@ -60,13 +54,13 @@ public class GameWindow{
 			@Override
 			public void windowClosing(WindowEvent e) {
 				// TODO Auto-generated method stub
-				frame = null;
+				mainFrame = null;
 			}
 
 			@Override
 			public void windowClosed(WindowEvent e) {
 				// TODO Auto-generated method stub
-				frame = null;
+				mainFrame = null;
 			}
 
 			@Override
@@ -95,46 +89,45 @@ public class GameWindow{
 			
 		});
 		
-		board = new JLabel[row][column];
+		gameLabelBoard = new JLabel[row][column];
 		
 		try {
-			grass = ImageIO.read(new File("images/grass.png"));
-			player = ImageIO.read(new File("images/player.png"));
-			zombie = ImageIO.read(new File("images/zombie.png"));
-			exit = ImageIO.read(new File("images/exit.jpg"));
-			wall = ImageIO.read(new File("images/wall.jpg"));
+			grassImage = ImageIO.read(new File("images/grassImage.png"));
+			playerImage = ImageIO.read(new File("images/playerImage.png"));
+			zombieImage = ImageIO.read(new File("images/zombieImage.png"));
+			exitImage = ImageIO.read(new File("images/exitImage.jpg"));
+			wallImage = ImageIO.read(new File("images/wallImage.jpg"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 
-		panel = new JPanel();
-	    panel.setLayout(new GridLayout(row, column));
+		mainPanel = new JPanel();
+	    mainPanel.setLayout(new GridLayout(row, column));
 	    for (int i = 0; i < row; i++) {
 	    	for (int j = 0; j < column; j++) {
-				JLabel tmp = new JLabel();
-				tmp.setPreferredSize(new Dimension(labelsize,labelsize));
-				panel.add(tmp);
-				board[i][j] = tmp;
+				JLabel newLabel = new JLabel();
+				newLabel.setPreferredSize(new Dimension(LABEL_SIZE, LABEL_SIZE));
+				mainPanel.add(newLabel);
+				gameLabelBoard[i][j] = newLabel;
 			}
 		}
 		
-		frame.add(panel);
-		frame.pack();
-		Rectangle r = frame.getBounds();
-		frame.setBounds(dim.width/2-r.width/2, dim.height/2-r.height/2, r.width, r.height);
-		frame.setVisible(true);
+		mainFrame.add(mainPanel);
+		mainFrame.pack();
+		Rectangle rect = mainFrame.getBounds();
+		mainFrame.setBounds(dimension.width/2-rect.width/2, dimension.height/2-rect.height/2, rect.width, rect.height);
+		mainFrame.setVisible(true);
 	}
 	private void clearBoard() {
-		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[0].length; j++) {
-				board[i][j].setIcon(new ImageIcon(grass.getScaledInstance(labelsize, labelsize,Image.SCALE_SMOOTH)));
+		for (int i = 0; i < gameLabelBoard.length; i++) {
+			for (int j = 0; j < gameLabelBoard[0].length; j++) {
+				gameLabelBoard[i][j].setIcon(new ImageIcon(grassImage.getScaledInstance(LABEL_SIZE, LABEL_SIZE,Image.SCALE_SMOOTH)));
 			}
 		}
 	}
-	
-	//Itt a rajzolás, jobb képeket még keresni kell!
+
 	public void drawBoard(char[][] gameboard) {
 		
 		clearBoard();
@@ -143,25 +136,25 @@ public class GameWindow{
 			for (int j = 0; j < gameboard[i].length; j++) {
 				BufferedImage img = null;
 				if(gameboard[i][j] == 'p') {
-					img = player;
+					img = playerImage;
 				} else if(gameboard[i][j] == 'z') {
-					img = zombie;
+					img = zombieImage;
 				} else if(gameboard[i][j] == 'e') {
-					img = exit;
+					img = exitImage;
 				} else if(gameboard[i][j] == 'w') {
-					img = wall;
+					img = wallImage;
 				} else {
 					continue;
 				}
-				Image icon = img.getScaledInstance(labelsize, labelsize,Image.SCALE_SMOOTH);
-				board[i][j].setIcon(new ImageIcon(icon));
+				Image icon = img.getScaledInstance(LABEL_SIZE, LABEL_SIZE,Image.SCALE_SMOOTH);
+				gameLabelBoard[i][j].setIcon(new ImageIcon(icon));
 			}
 		}
-		frame.revalidate();
+		mainFrame.revalidate();
 	}
 	
 	public boolean isFrameActive () {
-		if (frame == null) {
+		if (mainFrame == null) {
 			return false;
 		} else {
 			return true;

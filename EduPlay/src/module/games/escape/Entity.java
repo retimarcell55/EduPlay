@@ -4,30 +4,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Entity {
-	protected int posrow;
-	protected int poscolumn;
+	protected int positionRow;
+	protected int positionColumn;
 	protected String name;
 	
-	public Entity(String name,int posrow, int poscolumn) {
-		this.setPosrow(posrow);
-		this.setPoscolumn(poscolumn);
+	public Entity(String name, int positionRow, int positionColumn) {
+		this.setPositionRow(positionRow);
+		this.setPositionColumn(positionColumn);
 		this.setName(name);
 	}
 
-	public int getPosrow() {
-		return posrow;
+	public int getPositionRow() {
+		return positionRow;
 	}
 
-	public void setPosrow(int posrow) {
-		this.posrow = posrow;
+	public void setPositionRow(int positionRow) {
+		this.positionRow = positionRow;
 	}
 
-	public int getPoscolumn() {
-		return poscolumn;
+	public int getPositionColumn() {
+		return positionColumn;
 	}
 
-	public void setPoscolumn(int poscolumn) {
-		this.poscolumn = poscolumn;
+	public void setPositionColumn(int positionColumn) {
+		this.positionColumn = positionColumn;
 	}
 	
 	public String getName() {
@@ -38,76 +38,76 @@ public abstract class Entity {
 		this.name = name;
 	}
 	
-	protected static List<Position> getNeighbour(Position p, int row, int col) {
-		List<Position> neighours = new ArrayList<Position>();
+	protected static List<Position> getNeighbour(Position position, int row, int col) {
+		List<Position> neighbours = new ArrayList<Position>();
 
-		Position posLeft = p.getLeft();
-		if (posLeft.row >= 0 && posLeft.row < row && posLeft.col >= 0 && posLeft.col < col)
-			neighours.add(posLeft);
-		Position posRight = p.getRight();
-		if (posRight.row >= 0 && posRight.row < row && posRight.col >= 0 && posRight.col < col)
-			neighours.add(posRight);
-		Position posUp = p.getUp();
-		if (posUp.row >= 0 && posUp.row < row && posUp.col >= 0 && posUp.col < col)
-			neighours.add(posUp);
-		Position posDown = p.getBottom();
-		if (posDown.row >= 0 && posDown.row < row && posDown.col >= 0 && posDown.col < col)
-			neighours.add(posDown);
-		Position posUpLeft = p.getUpLeft();
-		if (posUpLeft.row >= 0 && posUpLeft.row < row && posUpLeft.col >= 0 && posUpLeft.col < col)
-			neighours.add(posUpLeft);
-		Position posUpRight = p.getUpRight();
-		if (posUpRight.row >= 0 && posUpRight.row < row && posUpRight.col >= 0 && posUpRight.col < col)
-			neighours.add(posUpRight);
-		Position posBottomLeft = p.getBottomLeft();
-		if (posBottomLeft.row >= 0 && posBottomLeft.row < row && posBottomLeft.col >= 0 && posBottomLeft.col < col)
-			neighours.add(posBottomLeft);
-		Position posBottomRight = p.getBottomRight();
-		if (posBottomRight.row >= 0 && posBottomRight.row < row && posBottomRight.col >= 0 && posBottomRight.col < col)
-			neighours.add(posBottomRight);
+		Position posLeft = position.getLeft();
+		if (posLeft.row >= 0 && posLeft.row < row && posLeft.column >= 0 && posLeft.column < col)
+			neighbours.add(posLeft);
+		Position posRight = position.getRight();
+		if (posRight.row >= 0 && posRight.row < row && posRight.column >= 0 && posRight.column < col)
+			neighbours.add(posRight);
+		Position posUp = position.getUp();
+		if (posUp.row >= 0 && posUp.row < row && posUp.column >= 0 && posUp.column < col)
+			neighbours.add(posUp);
+		Position posDown = position.getBottom();
+		if (posDown.row >= 0 && posDown.row < row && posDown.column >= 0 && posDown.column < col)
+			neighbours.add(posDown);
+		Position posUpLeft = position.getUpLeft();
+		if (posUpLeft.row >= 0 && posUpLeft.row < row && posUpLeft.column >= 0 && posUpLeft.column < col)
+			neighbours.add(posUpLeft);
+		Position posUpRight = position.getUpRight();
+		if (posUpRight.row >= 0 && posUpRight.row < row && posUpRight.column >= 0 && posUpRight.column < col)
+			neighbours.add(posUpRight);
+		Position posBottomLeft = position.getBottomLeft();
+		if (posBottomLeft.row >= 0 && posBottomLeft.row < row && posBottomLeft.column >= 0 && posBottomLeft.column < col)
+			neighbours.add(posBottomLeft);
+		Position posBottomRight = position.getBottomRight();
+		if (posBottomRight.row >= 0 && posBottomRight.row < row && posBottomRight.column >= 0 && posBottomRight.column < col)
+			neighbours.add(posBottomRight);
 
-		return neighours;
+		return neighbours;
 	}
 	
 	public class Position {
 		public int row;
-		public int col;
+		public int column;
 
-		public Position(int row, int col) {
+		public Position(int row, int column) {
 			this.row = row;
-			this.col = col;
+			this.column = column;
 		}
 
 		public Position getLeft() {
-			return new Position(row, col - 1);
+			return new Position(row, column - 1);
 		}
 
 		public Position getRight() {
-			return new Position(row, col + 1);
+			return new Position(row, column + 1);
 		}
 
 		public Position getBottom() {
-			return new Position(row + 1, col);
+			return new Position(row + 1, column);
 		}
 
 		public Position getUp() {
-			return new Position(row - 1, col);
+			return new Position(row - 1, column);
 		}
 
 		public Position getUpLeft() {
-			return new Position(row - 1, col - 1);
+			return new Position(row - 1, column - 1);
 		}
 
 		public Position getUpRight() {
-			return new Position(row - 1, col + 1);
+			return new Position(row - 1, column + 1);
 		}
 
 		public Position getBottomLeft() {
-			return new Position(row + 1, col - 1);
+			return new Position(row + 1, column - 1);
 		}
 
 		public Position getBottomRight() {
-			return new Position(row + 1, col + 1);
+			return new Position(row + 1, column + 1);
 		}
 	}
 	
