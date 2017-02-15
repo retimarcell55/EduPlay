@@ -1,6 +1,6 @@
-package module.games.bash;
+package eduplay.module.games.bash;
 
-import module.ApplicationModule;
+import eduplay.module.ApplicationModule;
 
 public interface BashInterface extends ApplicationModule{
 

@@ -1,4 +1,4 @@
-package module.games.escape;
+package eduplay.module.games.escape;
 
 import java.util.ArrayList;
 import java.util.List;

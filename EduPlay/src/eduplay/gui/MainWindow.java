@@ -1,4 +1,4 @@
-package gui;
+package eduplay.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -13,7 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 
-import connection.Coordinator;
+import eduplay.connection.Coordinator;
 
 public class MainWindow {
 

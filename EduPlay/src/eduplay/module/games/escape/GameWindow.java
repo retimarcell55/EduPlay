@@ -1,4 +1,4 @@
-package module.games.escape;
+package eduplay.module.games.escape;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -92,11 +92,11 @@ public class GameWindow{
 		gameLabelBoard = new JLabel[row][column];
 		
 		try {
-			grassImage = ImageIO.read(new File("images/grassImage.png"));
-			playerImage = ImageIO.read(new File("images/playerImage.png"));
-			zombieImage = ImageIO.read(new File("images/zombieImage.png"));
-			exitImage = ImageIO.read(new File("images/exitImage.jpg"));
-			wallImage = ImageIO.read(new File("images/wallImage.jpg"));
+			grassImage = ImageIO.read(new File("images/grass.png"));
+			playerImage = ImageIO.read(new File("images/player.png"));
+			zombieImage = ImageIO.read(new File("images/zombie.png"));
+			exitImage = ImageIO.read(new File("images/exit.jpg"));
+			wallImage = ImageIO.read(new File("images/wall.jpg"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -128,20 +128,20 @@ public class GameWindow{
 		}
 	}
 
-	public void drawBoard(char[][] gameboard) {
+	public void drawBoard(char[][] gameBoard) {
 		
 		clearBoard();
 		
-		for (int i = 0; i < gameboard.length; i++) {
-			for (int j = 0; j < gameboard[i].length; j++) {
+		for (int i = 0; i < gameBoard.length; i++) {
+			for (int j = 0; j < gameBoard[i].length; j++) {
 				BufferedImage img = null;
-				if(gameboard[i][j] == 'p') {
+				if(gameBoard[i][j] == 'p') {
 					img = playerImage;
-				} else if(gameboard[i][j] == 'z') {
+				} else if(gameBoard[i][j] == 'z') {
 					img = zombieImage;
-				} else if(gameboard[i][j] == 'e') {
+				} else if(gameBoard[i][j] == 'e') {
 					img = exitImage;
-				} else if(gameboard[i][j] == 'w') {
+				} else if(gameBoard[i][j] == 'w') {
 					img = wallImage;
 				} else {
 					continue;

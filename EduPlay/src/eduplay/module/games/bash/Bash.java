@@ -1,4 +1,4 @@
-package module.games.bash;
+package eduplay.module.games.bash;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import connection.*;
+import eduplay.connection.*;
 
 public class Bash implements BashInterface {
 

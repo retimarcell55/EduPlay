@@ -1,4 +1,4 @@
-package gui;
+package eduplay.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.border.EmptyBorder;
 
-import connection.Coordinator;
+import eduplay.connection.Coordinator;
 
 import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.autocomplete.BasicCompletion;
@@ -39,7 +39,7 @@ import org.fife.ui.rsyntaxtextarea.*;
 public class ApplicationWindow {
 
 	private JFrame mainFrame;
-	private JButton compile;
+	private JButton compileButton;
 	private JPanel inputPanel;
 	private JPanel outputPanel;
 	private JPanel settingsPanel;
@@ -170,8 +170,8 @@ public class ApplicationWindow {
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		inputPanel.add(inputScrollPane, BorderLayout.CENTER);
 
-		compile = new JButton("Ford�t�s");
-		compile.addActionListener(new ActionListener() {
+		compileButton = new JButton("Ford�t�s");
+		compileButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -189,7 +189,7 @@ public class ApplicationWindow {
 				}
 				
 				try {
-					Coordinator.compile(inputTextField.getText().toString());
+					Coordinator.compileAndStartExercise();
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -207,7 +207,7 @@ public class ApplicationWindow {
 			}
 
 		});
-		inputPanel.add(compile, BorderLayout.PAGE_END);
+		inputPanel.add(compileButton, BorderLayout.PAGE_END);
 
 		mainPanel.add(inputPanel);
 
@@ -280,6 +280,10 @@ public class ApplicationWindow {
 
 	public void clearMessage() {
 		outputTextField.setText("");
+	}
+
+	public String getPlayerTurnCode() {
+		return inputTextField.getText().toString();
 	}
 	
 	private CompletionProvider createCompletionProvider() {

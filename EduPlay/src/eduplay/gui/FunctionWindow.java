@@ -1,4 +1,4 @@
-package gui;
+package eduplay.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -22,7 +22,7 @@ import javax.swing.JScrollPane;
 
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
-import connection.Coordinator;
+import eduplay.connection.Coordinator;
 
 import org.fife.ui.rsyntaxtextarea.*;
 

@@ -1,6 +1,6 @@
-package connection;
+package eduplay.connection;
 
-import module.ApplicationModule;
+import eduplay.module.ApplicationModule;
 
 public interface Callable {
 	

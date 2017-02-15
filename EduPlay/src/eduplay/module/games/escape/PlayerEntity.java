@@ -1,4 +1,4 @@
-package module.games.escape;
+package eduplay.module.games.escape;
 
 public class PlayerEntity extends Entity {
 

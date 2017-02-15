@@ -1,6 +1,6 @@
-package module.games.escape;
+package eduplay.module.games.escape;
 
-import module.ApplicationModule;
+import eduplay.module.ApplicationModule;
 
 public interface EscapeInterface extends ApplicationModule {
 

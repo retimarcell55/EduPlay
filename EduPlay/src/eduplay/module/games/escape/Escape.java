@@ -1,4 +1,4 @@
-package module.games.escape;
+package eduplay.module.games.escape;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,9 +13,9 @@ import java.util.Random;
 
 import javax.swing.SwingWorker;
 
-import connection.Callable;
-import connection.Coordinator;
-import module.games.escape.Entity.Position;
+import eduplay.connection.Callable;
+import eduplay.connection.Coordinator;
+import eduplay.module.games.escape.Entity.Position;
 
 public class Escape implements EscapeInterface {
 

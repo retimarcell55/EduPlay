@@ -1,4 +1,4 @@
-package module.games.escape;
+package eduplay.module.games.escape;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Random;
 
-import connection.Coordinator;
+import eduplay.connection.Coordinator;
 
 public class ZombieEntity extends Entity {
 

@@ -1,8 +1,6 @@
-package module;
+package eduplay.module;
 
 import java.util.ArrayList;
-
-import connection.Callable;
 
 public interface ApplicationModule {
 
