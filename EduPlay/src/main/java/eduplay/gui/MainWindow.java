@@ -52,19 +52,14 @@ public class MainWindow {
 		
 		startButton = new JButton("Indítás");
 		startButton.setBackground(Color.CYAN);
-		startButton.addActionListener(new ActionListener() {
+		startButton.addActionListener(e -> {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-				if(modulesComboBox.getSelectedItem().toString() != "V�lassz modult!") {
-					mainFrame.dispose();
-					Coordinator.openApplication(modulesComboBox.getSelectedItem().toString());
-				}
-				
-			}
-					
-		});
+            if(modulesComboBox.getSelectedItem().toString() != "V�lassz modult!") {
+                mainFrame.dispose();
+                Coordinator.openApplication(modulesComboBox.getSelectedItem().toString());
+            }
+
+        });
 		mainFrame.getContentPane().add(startButton,BorderLayout.CENTER);
 		
 		aboutButton = new JButton("A Programr�l");
@@ -74,15 +69,7 @@ public class MainWindow {
 		exitButton = new JButton("Kil�p�s");
 		exitButton.setBackground(Color.RED);
 		exitButton.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
-		exitButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				mainFrame.dispose();
-				
-			}
-					
-		});
+		exitButton.addActionListener(e -> mainFrame.dispose());
 		mainFrame.getContentPane().add(exitButton,BorderLayout.PAGE_END);
 		
 		mainFrame.setVisible(true);

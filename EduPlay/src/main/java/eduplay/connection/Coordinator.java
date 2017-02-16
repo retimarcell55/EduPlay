@@ -68,7 +68,7 @@ public class Coordinator {
 	private static void createApplicationWindow() {
 		EventQueue.invokeLater(() -> {
 			try {
-				mainWindow = new MainWindow();
+				appWindow = new ApplicationWindow();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
