@@ -122,7 +122,8 @@ public class Bash implements BashInterface {
         if (selectedExercise == "Bash - t dobott az ellenfél? <elágazás>") {
             api = "void myTrust(boolean b) -> Ha az ellenfél dobott az adott körben, akkor egy " +
                     "boolean értékkel megadhatod, hogy elhiszed-e a dobását vagy sem \n"
-                    + "int getComputerLastAnnounceValue() -> A számítógép legutóbbi bemondását kérheted le " +
+                    + "int getComputerLastAnnounceValue() -> A számítógép legutóbbi bemondását " +
+                    "kérheted le " +
                     "ezzel a függvénnyel \n"
                     + "void print(String s) -> A képernyődre irathatsz ki ezzel a függvénnyel \n"
                     + "\n"
@@ -139,7 +140,8 @@ public class Bash implements BashInterface {
                     "érvénytelenségből mennyi volt\n"
                     + "Például ha beírjuk hogy whyNotValid(0,2,3) akkor azt közöljük, hogy 2 túl " +
                     "kicsi és 3 olyan dobás volt, ahol rossz sorrendben voltak a számok.\n"
-                    + "int getComputerLastAnnounceValue() -> A számítógép legutóbbi bemondását kérheted le " +
+                    + "int getComputerLastAnnounceValue() -> A számítógép legutóbbi bemondását " +
+                    "kérheted le " +
                     "ezzel a függvénnyel \n"
                     + "void print(String s) -> A képernyődre irathatsz ki ezzel a függvénnyel \n"
                     + "\n"
@@ -149,9 +151,11 @@ public class Bash implements BashInterface {
                     "this.MyFunc()) \n";
         }
         if (selectedExercise == "Mit mondott a gép legtöbbször? <tömbkezelés>") {
-            api = "void announce(int number) -> Ezzel mondhatod meg az adott körben, hogy szerinted " +
+            api = "void announce(int number) -> Ezzel mondhatod meg az adott körben, hogy " +
+                    "szerinted " +
                     "eddig mi volt a legtöbbet dobott érték\n"
-                    + "int getComputerLastAnnounceValue() -> A számítógép legutóbbi bemondását kérheted le " +
+                    + "int getComputerLastAnnounceValue() -> A számítógép legutóbbi bemondását " +
+                    "kérheted le " +
                     "ezzel a függvénnyel \n"
                     + "void print(String s) -> A képernyődre irathatsz ki ezzel a függvénnyel \n"
                     + "\n"
@@ -161,18 +165,22 @@ public class Bash implements BashInterface {
                     "this.MyFunc()) \n";
         }
         if (selectedExercise == "Játék a gép ellen") {
-            api = "void announce(int number) -> Ha te dobtál az adott körben, akkor a függvénnyel " +
+            api = "void announce(int number) -> Ha te dobtál az adott körben, akkor a függvénnyel" +
+                    " " +
                     "mondhatod be a dobásod értékét, ami vagy igaz, vagy nem \n"
                     + "void myTrust(boolean b) -> Ha az ellenfél dobott az adott körben, akkor " +
                     "egy boolean értékkel megadhatod, hogy elhiszed-e a dobását vagy sem \n"
                     + "boolean isMyTurn() -> Egy logikai értéket ad vissza, hogy az adott körben " +
                     "te dobsz-e vagy sem \n"
-                    + "int getMyActualThrowValue() -> Az adott dobásod értékét kérheted le a függvény " +
+                    + "int getMyActualThrowValue() -> Az adott dobásod értékét kérheted le a " +
+                    "függvény " +
                     "segítségével \n"
-                    + "int getComputerLastAnnounceValue() -> A számítógép legutóbbi bemondását kérheted le " +
+                    + "int getComputerLastAnnounceValue() -> A számítógép legutóbbi bemondását " +
+                    "kérheted le " +
                     "ezzel a függvénnyel \n"
                     + "void print(String s) -> A képernyődre irathatsz ki ezzel a függvénnyel \n"
-                    + "int getMyLastAnnounceValue() -> A te legutóbbi bemondásodat kérdezheted le a " +
+                    + "int getMyLastAnnounceValue() -> A te legutóbbi bemondásodat kérdezheted le" +
+                    " a " +
                     "függvénnyel \n"
                     + "\n" + "Ne feledd, a függvényeket az app tagváltozón keresztül éred el! (pl" +
                     " : app.isMyTurn()) \n"
@@ -191,7 +199,8 @@ public class Bash implements BashInterface {
                     + "Az ellenfél minden körben dobni fog véletlenszerűen és mindig igazat mond," +
                     " \n"
                     + "a játékos csak szemlélő és értékelheti a számítógép dobásait.\n"
-                    + "A számítógép aktuális dobását a getComputerLastAnnounceValue függvénnyel kérhetjük " +
+                    + "A számítógép aktuális dobását a getComputerLastAnnounceValue függvénnyel " +
+                    "kérhetjük " +
                     "le,\n"
                     + "A myTrust függvény használatával pedig eldönthetjük egy dobásról, hogy " +
                     "bash - e (true),\n"
@@ -208,7 +217,8 @@ public class Bash implements BashInterface {
                     + "A számítógép 1 - től 99 - ig fog egész számokat mondani véletlenszerűen, " +
                     "hogy teszteljen,\n"
                     + "a játékos csak szemlélő és értékelheti a számítógép bemondásait.\n"
-                    + "A számítógép aktuális bemondását a getComputerLastAnnounceValue függvénnyel kérhetjük" +
+                    + "A számítógép aktuális bemondását a getComputerLastAnnounceValue " +
+                    "függvénnyel kérhetjük" +
                     " le,\n"
                     + "A myTrust függvény használatával pedig eldönthetjük egy bemondásról, hogy " +
                     "érvényes - e (true),\n"
@@ -243,9 +253,11 @@ public class Bash implements BashInterface {
                     + "Először a 32 dobásból volt a legtöbb, majd második körben nem volt maximum" +
                     " mert 1db 32 -es és 1db 11- es volt,\n"
                     + "majd megint egy 32 -es következett, amiből összesen így kettő lett."
-                    + "Az aktuális bemondásunkat a announce függvény segítségével juttathatjuk el a " +
+                    + "Az aktuális bemondásunkat a announce függvény segítségével juttathatjuk el" +
+                    " a " +
                     "gépnek\n"
-                    + "A gép aktuális bemondását a getComputerLastAnnounceValue függvénnyel kérhetjük le.\n"
+                    + "A gép aktuális bemondását a getComputerLastAnnounceValue függvénnyel " +
+                    "kérhetjük le.\n"
                     + "Az előre beállított ágens véletlenszerű értéket mond minden körben.\n"
                     + "Vajon 100 dobás mindegyike után meg tudjuk állapítani melyikből volt eddig" +
                     " a legtöbb?";
@@ -294,7 +306,7 @@ public class Bash implements BashInterface {
         isPlayerTrust = false;
         isFirstTurn = true;
         isComputerTrust = false;
-        throwingOccurrenceFrom61To65 = new ArrayList<Integer>(Arrays.asList(0, 0, 0, 0, 0));
+        throwingOccurrenceFrom61To65 = new ArrayList<>(Arrays.asList(0, 0, 0, 0, 0));
         courageFactor = 0;
         playerLiedCount = 0;
         playerNotLiedCount = 0;
@@ -316,10 +328,8 @@ public class Bash implements BashInterface {
         }
 
         Coordinator.appWindow.clearMessage();
-        Coordinator.appWindow.outputMessage("" + throwingOccurrenceFrom61To65.size());
     }
 
-    // A játékot lebonyolító függvény
     @Override
     public void playSelectedExercise() {
 
@@ -725,7 +735,7 @@ public class Bash implements BashInterface {
     private void intelligence() {
 
 		/*if(turnCount%((int)(POINTS_TO_WIN*0.15)) == 0) {
-			if(playerTrustedCount > playerNotTrustedCount && computerPoints > playerPoints) {
+            if(playerTrustedCount > playerNotTrustedCount && computerPoints > playerPoints) {
 				if(courageFactor<3) {
 					courageFactor++;
 				}
@@ -862,7 +872,8 @@ public class Bash implements BashInterface {
                         Coordinator.appWindow.outputMessage("<GÉP> Elhiszem");
                         isComputerTrust = true;
                     }
-                } else if (playerActualAnnounceValue == nextBiggerThrow(computerActualAnnounceValue)) {
+                } else if (playerActualAnnounceValue == nextBiggerThrow
+                        (computerActualAnnounceValue)) {
                     int chance = rnd.nextInt(10) + 1;
                     if (chance < (6 - courageFactor)) {
                         Coordinator.appWindow.outputMessage("<GÉP> Nem hiszem el!");
@@ -923,13 +934,14 @@ public class Bash implements BashInterface {
     public int whatIsStronger(int firstThrow, int secondThrow) {
         if (firstThrow == secondThrow) {
             return 2;
-        } else if ((firstThrow > secondThrow && !isItBash(firstThrow) && !isItBash(secondThrow)
-                && secondThrow != 21) || (firstThrow > secondThrow && isItBash(firstThrow) &&
+        } else if (firstThrow == 21) {
+            return 0;
+        } else if (secondThrow == 21) {
+            return 1;
+        } else if ((firstThrow > secondThrow && !isItBash(firstThrow) &&
+                !isItBash(secondThrow)) || (firstThrow > secondThrow && isItBash(firstThrow) &&
                 isItBash(secondThrow))
-                || (firstThrow == 21) || (firstThrow < secondThrow && isItBash(firstThrow) &&
-                !isItBash(secondThrow))
-                || (firstThrow > secondThrow && isItBash(firstThrow) && !isItBash(secondThrow) &&
-                secondThrow != 21)) {
+                || (isItBash(firstThrow) && !isItBash(secondThrow))) {
             return 0;
         } else {
             return 1;
@@ -1024,10 +1036,12 @@ public class Bash implements BashInterface {
         int actualThrow = 0;
 
         if (firstDigit > secondDigit) {
-            actualThrow = Integer.parseInt(Integer.toString(firstDigit) + Integer.toString(secondDigit));
+            actualThrow = Integer.parseInt(Integer.toString(firstDigit) + Integer.toString
+                    (secondDigit));
 
         } else {
-            actualThrow = Integer.parseInt(Integer.toString(secondDigit) + Integer.toString(firstDigit));
+            actualThrow = Integer.parseInt(Integer.toString(secondDigit) + Integer.toString
+                    (firstDigit));
         }
 
         return actualThrow;
