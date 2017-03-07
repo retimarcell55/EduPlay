@@ -1,27 +1,25 @@
 package eduplay.module.games.escape;
 
 public abstract class Environment {
-	private int positionRow;
-	private int positionColumn;
+	private Position position;
 	
-	public Environment(int positionRow, int positionColumn) {
-		this.setPositionRow(positionRow);
-		this.setPositionColumn(positionColumn);
+	public Environment(Position position) {
+		this.position = position;
 	}
 
 	public int getPositionRow() {
-		return positionRow;
+		return position.row;
 	}
 
 	public void setPositionRow(int positionRow) {
-		this.positionRow = positionRow;
+		this.position.row = positionRow;
 	}
 
 	public int getPositionColumn() {
-		return positionColumn;
+		return position.column;
 	}
 
 	public void setPositionColumn(int positionColumn) {
-		this.positionColumn = positionColumn;
+		this.position.column = positionColumn;
 	}
 }

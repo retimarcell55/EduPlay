@@ -15,11 +15,12 @@ import javax.swing.SwingWorker;
 
 import eduplay.connection.Callable;
 import eduplay.connection.Coordinator;
-import eduplay.module.games.escape.Entity.Position;
 
 public class Escape implements EscapeInterface {
 
-    private ArrayList<String> exercises = new ArrayList<String>();
+    private final int MAXIMUM_TURN_COUNT = 50;
+
+    private ArrayList<String> exercises = new ArrayList<>();
     private String selectedExercise;
 
     private char[][] gameBoard;
@@ -31,7 +32,6 @@ public class Escape implements EscapeInterface {
     private int boardWidth;
     private int boardHeight;
     private boolean isPlayerAlreadyDoneSomething;
-    private int maximumTurnCount;
     private Random rnd;
 
     private int zombiePositionRow;
@@ -54,11 +54,10 @@ public class Escape implements EscapeInterface {
         turnCount = 0;
         isRuntimeError = false;
         isPlayerAlreadyDoneSomething = false;
-        maximumTurnCount = 50;
 
         Coordinator.appWindow.clearMessage();
-        entities = new ArrayList<Entity>();
-        environmentObjects = new ArrayList<Environment>();
+        entities = new ArrayList<>();
+        environmentObjects = new ArrayList<>();
 
         if (selectedExercise == "Hol van a zombi? <ciklus , mátrixkezelés>") {
             boardWidth = rnd.nextInt(9) + 2;
@@ -72,68 +71,77 @@ public class Escape implements EscapeInterface {
             boardWidth = rnd.nextInt(9) + 2;
             boardHeight = rnd.nextInt(9) + 2;
         } else if (selectedExercise == "Juss ki élve - alapok!") {
-            boardWidth = 3;
-            boardHeight = 3;
-            PlayerEntity hero = new PlayerEntity("Player", 0, 0);
-            hero.equip(0, 0, 1);
-            entities.add(hero);
-            entities.add(new ZombieEntity("Zombi", 0, 2));
-            environmentObjects.add(new Exit(2, 2));
+            initializeMainExercise();
 
         } else if (selectedExercise == "Test") {
-            BufferedReader reader = null;
-            PlayerEntity hero = null;
-            try {
-
-                reader = new BufferedReader(new FileReader(new File(Coordinator.FILE_SOURCE +
-                        "/Test.txt")));
-
-                hero = new PlayerEntity("Player", 0, 0);
-                entities.add(hero);
-
-                String firstLine = reader.readLine();
-
-                hero.equip(Integer.parseInt(firstLine.split("\\s+")[0]), Integer.parseInt
-								(firstLine.split("\\s+")[1]),
-                        Integer.parseInt(firstLine.split("\\s+")[2]));
-
-                String secondLine = reader.readLine();
-
-                boardHeight = Integer.parseInt(secondLine.split("\\s+")[0]);
-                boardWidth = Integer.parseInt(secondLine.split("\\s+")[1]);
-
-                int zombieCount = 1;
-
-                for (int i = 0; i < boardHeight; i++) {
-
-                    String actualLine = reader.readLine();
-                    for (int j = 0; j < boardWidth; j++) {
-                        if (actualLine.split("\\s+")[j].equals("p")) {
-                            hero.setPositionRow(i);
-                            hero.setPositionColumn(j);
-                        } else if (actualLine.split("\\s+")[j].equals("z")) {
-                            entities.add(new ZombieEntity("Zombi" + zombieCount, i, j));
-                            zombieCount++;
-                        } else if (actualLine.split("\\s+")[j].equals("w")) {
-                            environmentObjects.add(new Wall(i, j));
-                        } else if (actualLine.split("\\s+")[j].equals("e")) {
-                            environmentObjects.add(new Exit(i, j));
-                        }
-                    }
-                }
-
-                reader.close();
-
-            } catch (FileNotFoundException e) {
-                Coordinator.appWindow.outputMessage(e.getMessage());
-            } catch (IOException e) {
-                Coordinator.appWindow.outputMessage(e.getMessage());
-            }
+            initializeTestExercise();
         }
         gameBoard = new char[boardHeight][boardWidth];
         gameWindow = new GameWindow(boardHeight, boardWidth);
         fillBoard();
         gameWindow.drawBoard(gameBoard);
+    }
+
+    private void initializeMainExercise() {
+        boardWidth = 3;
+        boardHeight = 3;
+        PlayerEntity hero = new PlayerEntity("Player", new Position(0,0));
+        hero.equip(0, 0, 1);
+        entities.add(hero);
+        entities.add(new ZombieEntity("Zombi",new Position(0,2)));
+        environmentObjects.add(new Exit(new Position(2,2)));
+    }
+
+    private void initializeTestExercise() {
+        BufferedReader reader;
+        PlayerEntity hero;
+        try {
+
+            reader = new BufferedReader(new FileReader(new File(Coordinator.FILE_SOURCE +
+                    "/Test.txt")));
+
+            hero = new PlayerEntity("Player",new Position(0,0));
+            entities.add(hero);
+
+            String firstLine = reader.readLine();
+
+            hero.equip(Integer.parseInt(firstLine.split("\\s+")[0]), Integer.parseInt
+                            (firstLine.split("\\s+")[1]),
+                    Integer.parseInt(firstLine.split("\\s+")[2]));
+
+            String secondLine = reader.readLine();
+
+            boardHeight = Integer.parseInt(secondLine.split("\\s+")[0]);
+            boardWidth = Integer.parseInt(secondLine.split("\\s+")[1]);
+
+            int zombieCount = 1;
+
+            for (int i = 0; i < boardHeight; i++) {
+
+                String actualLine = reader.readLine();
+                for (int j = 0; j < boardWidth; j++) {
+                    if (actualLine.split("\\s+")[j].equals("p")) {
+                        hero.setPositionRow(i);
+                        hero.setPositionColumn(j);
+                    } else if (actualLine.split("\\s+")[j].equals("z")) {
+                        entities.add(new ZombieEntity("Zombi" + zombieCount, new Position(i,
+                                j)));
+                        zombieCount++;
+                    } else if (actualLine.split("\\s+")[j].equals("w")) {
+                        environmentObjects.add(new Wall(new Position(i,j)));
+                    } else if (actualLine.split("\\s+")[j].equals("e")) {
+                        environmentObjects.add(new Exit(new Position(i,j)));
+                    }
+                }
+            }
+
+            reader.close();
+
+        } catch (FileNotFoundException e) {
+            Coordinator.appWindow.outputMessage(e.getMessage());
+        } catch (IOException e) {
+            Coordinator.appWindow.outputMessage(e.getMessage());
+        }
     }
 
     @Override
@@ -362,14 +370,14 @@ public class Escape implements EscapeInterface {
             protected Object doInBackground() throws Exception {
 
                 if (selectedExercise == "Hol van a zombi? <ciklus , mátrixkezelés>") {
-                    gameLoopExercise1();
+                    playExercise1();
                 } else if (selectedExercise == "Juss el a célig a lehető legkevesebb lépésből! " +
 						"<ciklus>"
                         || selectedExercise == "Juss el a célig a lehető legkevesebb lépésből! " +
 						"<rekurzió>") {
-                    gameLoopExercise2And3();
+                    playExercise2Or3();
                 } else {
-                    gameLoop();
+                    playMainExercise();
                 }
                 return null;
             }
@@ -386,7 +394,7 @@ public class Escape implements EscapeInterface {
         for (Entity entity : entities) {
             fillBoard();
             if (entity instanceof ZombieEntity) {
-                ((ZombieEntity) entity).intelligence(gameBoard, entities.get(0).getPositionRow(),
+                ((ZombieEntity) entity).nextMove(gameBoard, entities.get(0).getPositionRow(),
                         entities.get(0).getPositionColumn());
             }
         }
@@ -444,7 +452,6 @@ public class Escape implements EscapeInterface {
         }
     }
 
-    // Két entitás egymára lépett-e
     private <T extends Entity> boolean isEntityCollideWithObject(T entity1, T entity2) {
         if ((entity1.getPositionRow() == entity2.getPositionRow()) && (entity1.getPositionColumn() == entity2.getPositionColumn())) {
             return true;
@@ -479,7 +486,8 @@ public class Escape implements EscapeInterface {
     }
 
     private boolean isOneCellFromPosition(Entity entity, int row, int column) {
-        List<Position> neighbours = Entity.getNeighbour(entity.new Position(entity.getPositionRow(),
+        List<Position> neighbours = Position.getNeighbour(new Position(entity
+                        .getPositionRow(),
 						entity.getPositionColumn()),
                 gameBoard.length, gameBoard[0].length);
         for (Position position : neighbours) {
@@ -567,7 +575,7 @@ public class Escape implements EscapeInterface {
         }
     }
 
-    public void gameLoop() {
+    public void playMainExercise() {
         boolean isGameEnd = false;
 
         try {
@@ -577,7 +585,7 @@ public class Escape implements EscapeInterface {
             e.printStackTrace();
         }
 
-        while (!isGameEnd && turnCount != maximumTurnCount) {
+        while (!isGameEnd && turnCount != MAXIMUM_TURN_COUNT) {
             isPlayerAlreadyDoneSomething = false;
             if (!gameWindow.isFrameActive()) {
                 break;
@@ -586,7 +594,7 @@ public class Escape implements EscapeInterface {
             turnCount++;
             Coordinator.appWindow.outputMessage("<JÁTÉK> " + turnCount + ". kör");
             try {
-                player.playerTurn();
+                player.playerAction();
             } catch (Exception ex) {
                 Coordinator.appWindow.outputMessage(ex.toString());
                 isRuntimeError = true;
@@ -620,8 +628,7 @@ public class Escape implements EscapeInterface {
         }
     }
 
-    // Hol van a zombi? <ciklus , mátrixkezelés>
-    public void gameLoopExercise1() {
+    public void playExercise1() {
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -632,9 +639,10 @@ public class Escape implements EscapeInterface {
         int correctGuess = 0;
 
         while (turnCount != 10) {
-            entities = new ArrayList<Entity>();
-            entities.add(new ZombieEntity("Zombi", rnd.nextInt(boardHeight), rnd.nextInt
-					(boardWidth)));
+            entities = new ArrayList<>();
+            entities.add(new ZombieEntity("Zombi", new Position(rnd.nextInt(boardHeight), rnd
+                    .nextInt
+                            (boardWidth))));
 
             zombiePositionRow = 0;
             zombiePositionColumn = 0;
@@ -645,7 +653,7 @@ public class Escape implements EscapeInterface {
 
             Coordinator.appWindow.outputMessage("<JÁTÉK> " + turnCount + ". kör");
             try {
-                player.playerTurn();
+                player.playerAction();
             } catch (Exception ex) {
                 Coordinator.appWindow.outputMessage(ex.toString());
                 isRuntimeError = true;
@@ -687,73 +695,12 @@ public class Escape implements EscapeInterface {
 
     }
     
-    public void gameLoopExercise2And3() {
+    public void playExercise2Or3() {
 
-        environmentObjects.add(new Exit(rnd.nextInt(boardHeight), rnd.nextInt(boardWidth)));
-
-        while (true) {
-            int rndRow = rnd.nextInt(boardHeight);
-            int rndColumn = rnd.nextInt(boardWidth);
-
-            if (!(rndRow == environmentObjects.get(0).getPositionRow() && rndColumn == environmentObjects.get(0)
-					.getPositionColumn())) {
-                entities.add(new PlayerEntity("Player", rndRow, rndColumn));
-                break;
-            }
-        }
+        placeExitAndPlayerOnTheBoardRandomly();
 
         if (selectedExercise == "Juss el a célig a lehető legkevesebb lépésből! <rekurzió>") {
-            int maxWallCount = boardWidth * boardHeight / 2 - 1;
-            boolean isPossible = false;
-
-            while (!isPossible) {
-                while (maxWallCount != 0) {
-                    int rndRow = rnd.nextInt(boardHeight);
-                    int rndColumn = rnd.nextInt(boardWidth);
-
-                    if (!(rndRow == entities.get(0).getPositionRow() && rndColumn == entities.get(0).getPositionColumn()
-					)) {
-
-                        boolean good = true;
-                        for (Environment env : environmentObjects) {
-                            if (rndRow == env.getPositionRow() && rndColumn == env.getPositionColumn()) {
-                                good = false;
-                                break;
-                            }
-                        }
-
-                        if (good) {
-                            environmentObjects.add(new Wall(rndRow, rndColumn));
-                            maxWallCount--;
-                        }
-                    }
-                }
-                fillBoard();
-                if (getLeeDistance(entities.get(0).getPositionRow(), entities.get(0).getPositionColumn(),
-                        environmentObjects.get(0).getPositionRow(), environmentObjects.get(0)
-								.getPositionColumn()) == 0) {
-
-                    environmentObjects = new ArrayList<Environment>();
-                    entities = new ArrayList<Entity>();
-
-                    environmentObjects.add(new Exit(rnd.nextInt(boardHeight), rnd.nextInt
-							(boardWidth)));
-
-                    while (true) {
-                        int rndRow = rnd.nextInt(boardHeight);
-                        int rndColumn = rnd.nextInt(boardWidth);
-
-                        if (!(rndRow == environmentObjects.get(0).getPositionRow()
-                                && rndColumn == environmentObjects.get(0).getPositionColumn())) {
-                            entities.add(new PlayerEntity("Player", rndRow, rndColumn));
-                            break;
-                        }
-                    }
-                } else {
-                    isPossible = true;
-                }
-            }
-
+            fillBoardWithWallsRandomly();
         }
         fillBoard();
         int distance = 0;
@@ -783,7 +730,7 @@ public class Escape implements EscapeInterface {
             isPlayerAlreadyDoneSomething = false;
             Coordinator.appWindow.outputMessage("<JÁTÉK> " + turnCount + ". kör");
             try {
-                player.playerTurn();
+                player.playerAction();
             } catch (Exception ex) {
                 Coordinator.appWindow.outputMessage(ex.toString());
                 isRuntimeError = true;
@@ -814,6 +761,63 @@ public class Escape implements EscapeInterface {
         }
     }
 
+    private void placeExitAndPlayerOnTheBoardRandomly() {
+        environmentObjects = new ArrayList<>();
+        entities = new ArrayList<>();
+
+        environmentObjects.add(new Exit(new Position(rnd.nextInt(boardHeight), rnd.nextInt
+                (boardWidth))));
+
+        while (true) {
+            int rndRow = rnd.nextInt(boardHeight);
+            int rndColumn = rnd.nextInt(boardWidth);
+
+            if (!(rndRow == environmentObjects.get(0).getPositionRow() && rndColumn == environmentObjects.get(0)
+					.getPositionColumn())) {
+                entities.add(new PlayerEntity("Player", new Position(rndRow, rndColumn)));
+                break;
+            }
+        }
+    }
+
+    private void fillBoardWithWallsRandomly() {
+        int maxWallCount = boardWidth * boardHeight / 2 - 1;
+        boolean isPossible = false;
+
+        while (!isPossible) {
+            while (maxWallCount != 0) {
+                int rndRow = rnd.nextInt(boardHeight);
+                int rndColumn = rnd.nextInt(boardWidth);
+
+                if (!(rndRow == entities.get(0).getPositionRow() && rndColumn == entities.get(0).getPositionColumn()
+                )) {
+
+                    boolean isObjectAlreadyPlacedThere = false;
+                    for (Environment env : environmentObjects) {
+                        if (rndRow == env.getPositionRow() && rndColumn == env.getPositionColumn()) {
+                            isObjectAlreadyPlacedThere = true;
+                            break;
+                        }
+                    }
+
+                    if (!isObjectAlreadyPlacedThere) {
+                        environmentObjects.add(new Wall(new Position(rndRow, rndColumn)));
+                        maxWallCount--;
+                    }
+                }
+            }
+            fillBoard();
+            if (getLeeDistance(entities.get(0).getPositionRow(), entities.get(0).getPositionColumn(),
+                    environmentObjects.get(0).getPositionRow(), environmentObjects.get(0)
+                            .getPositionColumn()) == 0) {
+
+                placeExitAndPlayerOnTheBoardRandomly();
+            } else {
+                isPossible = true;
+            }
+        }
+    }
+
     @Override
     public int getPositionRow() {
         return entities.get(0).getPositionRow();
@@ -829,7 +833,6 @@ public class Escape implements EscapeInterface {
         return gameBoard;
     }
 
-    // Az adott pont a pályán belül van - e
     private boolean isOnTheBoard(int row, int col) {
         if (row >= 0 && row < boardHeight && col >= 0 && col < boardWidth) {
             return true;
@@ -1034,27 +1037,23 @@ public class Escape implements EscapeInterface {
     private int getLeeDistance(int fromX, int fromY, int toX, int toY) {
         int[][] distanceMatrix = new int[boardHeight][boardWidth];
 
-        PriorityQueue<Position> queue = new PriorityQueue<Position>(boardHeight * boardWidth,
-                new Comparator<Position>() {
-
-                    @Override
-                    public int compare(Position o1, Position o2) {
-                        if (distanceMatrix[o1.row][o1.column] < distanceMatrix[o2.row][o2.column])
-                            return -1;
-                        else if (distanceMatrix[o1.row][o1.column] > distanceMatrix[o2.row][o2.column])
-                            return 1;
-                        else
-                            return 0;
-                    }
+        PriorityQueue<Position> queue = new PriorityQueue<>(boardHeight * boardWidth,
+                (o1, o2) -> {
+                    if (distanceMatrix[o1.row][o1.column] < distanceMatrix[o2.row][o2.column])
+                        return -1;
+                    else if (distanceMatrix[o1.row][o1.column] > distanceMatrix[o2.row][o2.column])
+                        return 1;
+                    else
+                        return 0;
                 });
 
-        queue.offer(entities.get(0).new Position(fromX, fromY));
+        queue.offer(new Position(fromX, fromY));
         distanceMatrix[fromX][fromY] = 0;
 
         while (!queue.isEmpty()) {
 
             Position current = queue.poll();
-            List<Position> neighbours = Entity.getNeighbour(current, boardHeight, boardWidth);
+            List<Position> neighbours = Position.getNeighbour(current, boardHeight, boardWidth);
 
             for (Position neighbour : neighbours) {
 

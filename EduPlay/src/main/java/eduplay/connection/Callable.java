@@ -4,7 +4,7 @@ import eduplay.module.ApplicationModule;
 
 public interface Callable {
 	
-	void playerTurn();
+	void playerAction();
 	
 	<T extends ApplicationModule> void initializeSelectedModule(T app);
 	
