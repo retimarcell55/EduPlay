@@ -135,7 +135,8 @@ public class Coordinator {
 							.next();
 				}
 			} catch (FileNotFoundException e2) {
-				// TODO Auto-generated catch block
+				Coordinator.appWindow.outputMessage("Nem található a deklarációs kódot tartalmazó" +
+						" fájl");
 				e2.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
