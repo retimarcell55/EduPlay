@@ -88,73 +88,12 @@ public class Coordinator {
 		}
 	}
 
-	private static String getPlayerDeclarationCode() {
-		String declarationCode = "";
-		File declarationFile = new File(Coordinator.FILE_SOURCE + "/Helper.txt");
-		if (declarationFile.exists()) {
-			try {
-				BufferedReader br = new BufferedReader(new FileReader(Coordinator.FILE_SOURCE + "/Helper.txt"));
-				if (br.readLine() != null) {
-					declarationCode = new Scanner(new File(Coordinator.FILE_SOURCE + "/Helper" +
-							".txt")).useDelimiter("\\Z")
-							.next();
-				}
-			} catch (FileNotFoundException e2) {
-				// TODO Auto-generated catch block
-				e2.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return declarationCode;
-	}
-
-	private static String getPlayerTurnCode() {
-		return appWindow.getPlayerTurnCode();
-	}
-
-	private static String getPlayerClassCode() {
-
-		StringBuilder playerClassSourceCode = new StringBuilder();
-		playerClassSourceCode.append("import eduplay.module.ApplicationModule;\n ");
-		playerClassSourceCode.append("import eduplay.module.games.");
-		playerClassSourceCode.append(modules.get(selectedModule).replace("Interface", "")
-				.toLowerCase());
-		playerClassSourceCode.append("." + modules.get(selectedModule)
-				+ ";\n ");
-		playerClassSourceCode.append("import eduplay.connection.Callable; ");
-		playerClassSourceCode.append("import java.util.*;\n ");
-		playerClassSourceCode.append("public class Player implements Callable {\n  " );
-		playerClassSourceCode.append("private " + modules.get(selectedModule) + " app;\n ");
-		playerClassSourceCode.append(getPlayerDeclarationCode());
-		playerClassSourceCode.append("\n@Override\n public void playerTurn() {\n ");
-		playerClassSourceCode.append(getPlayerTurnCode());
-		playerClassSourceCode.append("\n}\n @Override\n ");
-		playerClassSourceCode.append("public <T extends ApplicationModule> void " +
-				"initializeSelectedModule( T app) {\n this.app = (");
-		playerClassSourceCode.append(modules.get(selectedModule) + ")app; \n}\n}");
-
-		return playerClassSourceCode.toString();
-	}
-
 	public static void compileAndStartExercise()
 			throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 
 		String playerClassSourceCode = getPlayerClassCode();
 
-		OutputStream errorOutput = new OutputStream() {
-			private StringBuilder sb = new StringBuilder();
-
-			@Override
-			public void write(int b) throws IOException {
-				this.sb.append((char) b);
-			}
-
-			@Override
-			public String toString() {
-				return this.sb.toString();
-			}
-		};
+		OutputStream errorOutput = createOutputStream();
 
 		File root = new File(FILE_SOURCE);
 
@@ -182,6 +121,73 @@ public class Coordinator {
 			appModule.playSelectedExercise();
 		}
 
+	}
+
+	private static String getPlayerDeclarationCode() {
+		String declarationCode = "";
+		File declarationFile = new File(Coordinator.FILE_SOURCE + "/Helper.txt");
+		if (declarationFile.exists()) {
+			try {
+				BufferedReader br = new BufferedReader(new FileReader(Coordinator.FILE_SOURCE + "/Helper.txt"));
+				if (br.readLine() != null) {
+					declarationCode = new Scanner(new File(Coordinator.FILE_SOURCE + "/Helper" +
+							".txt")).useDelimiter("\\Z")
+							.next();
+				}
+			} catch (FileNotFoundException e2) {
+				Coordinator.appWindow.outputMessage("Nem található a deklarációs kódot tartalmazó" +
+						" fájl");
+				e2.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return declarationCode;
+	}
+
+	private static String getPlayerActionCode() {
+		return appWindow.getPlayerActionCode();
+	}
+
+
+	private static String getPlayerClassCode() {
+
+		StringBuilder playerClassSourceCode = new StringBuilder();
+		playerClassSourceCode.append("import eduplay.module.ApplicationModule;\n ");
+		playerClassSourceCode.append("import eduplay.module.games.");
+		playerClassSourceCode.append(modules.get(selectedModule).replace("Interface", "")
+				.toLowerCase());
+		playerClassSourceCode.append("." + modules.get(selectedModule)
+				+ ";\n ");
+		playerClassSourceCode.append("import eduplay.connection.Callable; ");
+		playerClassSourceCode.append("import java.util.*;\n ");
+		playerClassSourceCode.append("public class Player implements Callable {\n  " );
+		playerClassSourceCode.append("private " + modules.get(selectedModule) + " app;\n ");
+		playerClassSourceCode.append(getPlayerDeclarationCode());
+		playerClassSourceCode.append("\n@Override\n public void playerAction() {\n ");
+		playerClassSourceCode.append(getPlayerActionCode());
+		playerClassSourceCode.append("\n}\n @Override\n ");
+		playerClassSourceCode.append("public <T extends ApplicationModule> void " +
+				"initializeSelectedModule( T app) {\n this.app = (");
+		playerClassSourceCode.append(modules.get(selectedModule) + ")app; \n}\n}");
+
+		return playerClassSourceCode.toString();
+	}
+
+	private static OutputStream createOutputStream() {
+		return new OutputStream() {
+                private StringBuilder sb = new StringBuilder();
+
+                @Override
+                public void write(int b) throws IOException {
+                    this.sb.append((char) b);
+                }
+
+                @Override
+                public String toString() {
+                    return this.sb.toString();
+                }
+            };
 	}
 
 	public static void returnFromApplicationWindow() {

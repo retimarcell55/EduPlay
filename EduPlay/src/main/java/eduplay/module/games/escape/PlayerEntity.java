@@ -6,8 +6,8 @@ public class PlayerEntity extends Entity {
 	private int ammo;
 	private int axe;
 
-	public PlayerEntity(String name, int positionColumn, int positionRow) {
-		super(name, positionColumn, positionRow);
+	public PlayerEntity(String name, Position position) {
+		super(name, position);
 		setSprint(0);
 		setAmmo(0);
 		setAxe(0);
@@ -34,7 +34,6 @@ public class PlayerEntity extends Entity {
 	public void setAmmo(int ammo) {
 		this.ammo = ammo;
 	}
-
 
 	public int getAxe() {
 		return axe;

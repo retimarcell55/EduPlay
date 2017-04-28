@@ -10,43 +10,40 @@ import eduplay.connection.Coordinator;
 
 public class ZombieEntity extends Entity {
 
-	public ZombieEntity(String name, int positionRow, int positionColumn) {
-		super(name, positionRow, positionColumn);
+	public ZombieEntity(String name, Position position) {
+		super(name, position);
 
 	}
 
 	Random rnd;
 
-	public void intelligence(char[][] gameBoard, int playerRow, int playerColumn) {
+	public void nextMove(char[][] gameBoard, int playerRow, int playerColumn) {
 
 		int boardHeight = gameBoard.length;
 		int boardWidth = gameBoard[0].length;
 
-		List<Position> possibleNeighbours = getNeighbour(new Position(this.positionRow, this.positionColumn), boardHeight,
+		List<Position> possibleNeighbours = Position.getNeighbour(new Position(getPositionRow(),
+						getPositionColumn()), boardHeight,
 				boardWidth);
 		for (Position position : possibleNeighbours) {
 			if (gameBoard[position.row][position.column] == 'p') {
-				this.positionRow = position.row;
-				this.positionColumn = position.column;
+				setPositionRow(position.row);
+				setPositionColumn( position.column);
 				return;
 			}
 		}
 
 		int[][] distanceMatrix = new int[boardHeight][boardWidth];
 		
-		PriorityQueue<Position> positionQueue = new PriorityQueue<Position>(boardWidth * boardHeight,
-				new Comparator<Position>() {
-
-					@Override
-					public int compare(Position o1, Position o2) {
-						if (distanceMatrix[o1.row][o1.column] < distanceMatrix[o2.row][o2.column])
-							return -1;
-						else if (distanceMatrix[o1.row][o1.column] > distanceMatrix[o2.row][o2.column])
-							return 1;
-						else
-							return 0;
-					}
-				});
+		PriorityQueue<Position> positionQueue = new PriorityQueue<>(boardWidth * boardHeight,
+				(o1, o2) -> {
+                    if (distanceMatrix[o1.row][o1.column] < distanceMatrix[o2.row][o2.column])
+                        return -1;
+                    else if (distanceMatrix[o1.row][o1.column] > distanceMatrix[o2.row][o2.column])
+                        return 1;
+                    else
+                        return 0;
+                });
 		
 		distanceMatrix[playerRow][playerColumn] = 0;
 		positionQueue.offer(new Position(playerRow, playerColumn));
@@ -54,7 +51,7 @@ public class ZombieEntity extends Entity {
 		while (!positionQueue.isEmpty()) {
 
 			Position current = positionQueue.poll();
-			List<Position> neighbours = getNeighbour(current, boardHeight, boardWidth);
+			List<Position> neighbours = Position.getNeighbour(current, boardHeight, boardWidth);
 
 			for (Position neighbour : neighbours) {
 				if (!(gameBoard[neighbour.row][neighbour.column] == 'z') && !(gameBoard[neighbour.row][neighbour.column] == 'e')
@@ -66,12 +63,12 @@ public class ZombieEntity extends Entity {
 					positionQueue.offer(neighbour);
 				}
 				
-				if (neighbour.row == this.positionRow && neighbour.column == this.positionColumn) {
+				if (neighbour.row == getPositionRow() && neighbour.column == getPositionColumn()) {
 
 					int distance = distanceMatrix[current.row][current.column];
 					rnd = new Random();
 
-					List<Position> possibleSteps = new ArrayList<Position>();
+					List<Position> possibleSteps = new ArrayList<>();
 					for (Position position : possibleNeighbours) {
 						if (distanceMatrix[position.row][position.column] == distance) {
 							possibleSteps.add(position);
@@ -81,9 +78,8 @@ public class ZombieEntity extends Entity {
 					int whichStepToChoose = rnd.nextInt(possibleSteps.size());
 					Coordinator.appWindow.outputMessage(getName() + " lépése: (" + getPositionRow() + "," + getPositionColumn()
 							+ ") -> (" + possibleSteps.get(whichStepToChoose).row + "," + possibleSteps.get(whichStepToChoose).column +")");
-					this.positionRow = possibleSteps.get(whichStepToChoose).row;
-					this.positionColumn = possibleSteps.get(whichStepToChoose).column;
-
+					setPositionRow(possibleSteps.get(whichStepToChoose).row);
+					setPositionColumn(possibleSteps.get(whichStepToChoose).column);
 					positionQueue.clear();
 					break;
 				}

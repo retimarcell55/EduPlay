@@ -2,8 +2,8 @@ package eduplay.module.games.escape;
 
 public class Exit extends Environment{
 
-	public Exit(int positionRow, int positinColumn) {
-		super(positionRow, positinColumn);
+	public Exit(Position position) {
+		super(position);
 		// TODO Auto-generated constructor stub
 	}
 

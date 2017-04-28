@@ -48,11 +48,6 @@ public class Bash implements BashInterface {
 
     private List<Integer> throwingOccurrenceFrom61To65;
     private final int COMPUTER_AI_TRESHOLD = (int) (POINTS_TO_WIN * 0.15);
-    private int courageFactor;
-    private int playerLiedCount;
-    private int playerNotLiedCount;
-    private int playerTrustedCount;
-    private int playerNotTrustedCount;
 
     public Bash() {
         exercises.add("Bash - t dobott az ellenfél? <elágazás>");
@@ -307,11 +302,6 @@ public class Bash implements BashInterface {
         isFirstTurn = true;
         isComputerTrust = false;
         throwingOccurrenceFrom61To65 = new ArrayList<>(Arrays.asList(0, 0, 0, 0, 0));
-        courageFactor = 0;
-        playerLiedCount = 0;
-        playerNotLiedCount = 0;
-        playerTrustedCount = 0;
-        playerNotTrustedCount = 0;
         isRuntimeError = false;
 
         tooSmall = 0;
@@ -328,6 +318,9 @@ public class Bash implements BashInterface {
         }
 
         Coordinator.appWindow.clearMessage();
+
+        this.player = Coordinator.player;
+        player.initializeSelectedModule(this);
     }
 
     @Override
@@ -335,600 +328,616 @@ public class Bash implements BashInterface {
 
         initializeExercise();
 
-        this.player = Coordinator.player;
-        player.initializeSelectedModule(this);
-
         if (selectedExercise == "Bash - t dobott az ellenfél? <elágazás>") {
-            int correctCounter = 0;
-            int bashCounter = 0;
-
-            for (int i = 1; i <= 100; i++) {
-
-                isPlayerTrust = randomInt(0, 1) != 0;
-
-                int randomThrow = generateRandomThrow();
-                computerActualAnnounceValue = randomThrow;
-
-                try {
-                    player.playerTurn();
-                } catch (Exception ex) {
-                    Coordinator.appWindow.outputMessage(ex.toString());
-                    break;
-                }
-
-                Coordinator.appWindow.outputMessage("A dobás: " + randomThrow);
-
-                if (isPlayerTrust) {
-                    Coordinator.appWindow.outputMessage("A dobásra az mondod, hogy bash!");
-                } else {
-                    Coordinator.appWindow.outputMessage("A dobásra az mondod, hogy nem bash!");
-                }
-
-                if ((isPlayerTrust == true && isItBash(randomThrow))) {
-                    Coordinator.appWindow.outputMessage("Bash volt, igazad volt!");
-                    correctCounter++;
-                    bashCounter++;
-                } else if ((isPlayerTrust == false && !isItBash(randomThrow))) {
-                    Coordinator.appWindow.outputMessage("Nem volt bash, igazad volt!");
-                    correctCounter++;
-                } else if (isItBash(randomThrow)) {
-                    bashCounter++;
-                    Coordinator.appWindow.outputMessage("Bash volt, tévedtél!");
-                } else {
-                    Coordinator.appWindow.outputMessage("Nem volt bash, tévedtél!");
-                }
-                Coordinator.appWindow.outputMessage("");
-            }
-            if (isRuntimeError) {
-                return;
-            }
-            Coordinator.appWindow.outputMessage("");
-            Coordinator.appWindow.outputMessage(
-                    "A 100 dobásból " + bashCounter + " volt bash és neked " + correctCounter + "" +
-                            " helyes találatod volt!");
-            if (correctCounter == 100) {
-                Coordinator.appWindow.outputMessage("A feladat kifogástalanul meg lett oldva!");
-            } else if (correctCounter > 50) {
-                Coordinator.appWindow.outputMessage("Valami eset talán nem lett lekezelve");
-            } else {
-                Coordinator.appWindow.outputMessage("Nem igazán működik az algoritmus");
-            }
+            playExercise1();
         }
         if (selectedExercise == "Érvényes volt a bemondás? <elágazás>") {
-            int correctCounter = 0;
-            int validCounter = 0;
-            for (int i = 1; i <= 100; i++) {
-
-                isPlayerTrust = randomInt(0, 1) != 0;
-
-                int randomInt = randomInt(1, 99);
-                computerActualAnnounceValue = randomInt;
-
-                try {
-                    player.playerTurn();
-                } catch (Exception ex) {
-                    Coordinator.appWindow.outputMessage(ex.toString());
-                    break;
-                }
-
-                Coordinator.appWindow.outputMessage("A dobás: " + randomInt);
-
-                if (isPlayerTrust) {
-                    Coordinator.appWindow.outputMessage("A dobásra az mondod, hogy érvényes!");
-                } else {
-                    Coordinator.appWindow.outputMessage("A dobásra az mondod, hogy nem érvényes!");
-                }
-
-                if (isValidThrowValue(randomInt)) {
-                    if (isPlayerTrust) {
-                        Coordinator.appWindow.outputMessage("Érvényes volt, igazad volt!");
-                        correctCounter++;
-                        validCounter++;
-                    } else {
-                        validCounter++;
-                        Coordinator.appWindow.outputMessage("Érvényes volt, tévedtél!");
-                    }
-                } else {
-                    if (isPlayerTrust) {
-                        Coordinator.appWindow.outputMessage("Nem volt érvényes, tévedtél!");
-                    } else {
-                        Coordinator.appWindow.outputMessage("Nem volt érvényes, igazad volt!");
-                        correctCounter++;
-                    }
-                }
-                Coordinator.appWindow.outputMessage("");
-            }
-            if (isRuntimeError) {
-                return;
-            }
-            Coordinator.appWindow.outputMessage("");
-            Coordinator.appWindow.outputMessage(
-                    "A 100 dobásból " + validCounter + " volt érvényes és neked " +
-                            correctCounter + " helyes találatod volt!");
-            Coordinator.appWindow.outputMessage("A rossz dobások oka előfordulásaik számával:");
-            Coordinator.appWindow.outputMessage("A kockának csak 6 oldala van: " +
-                    comp_justSixSide);
-            Coordinator.appWindow.outputMessage("Túl kicsi a dobás: " + comp_tooSmall);
-            Coordinator.appWindow.outputMessage("Nem jó sorrendben vannak a számok: " +
-                    comp_wrongOrder);
-            Coordinator.appWindow.outputMessage("Az általad vélt rossz dobások oka előfordulásaik" +
-                    " számával:");
-            Coordinator.appWindow.outputMessage("A kockának csak 6 oldala van: " + justSixSide);
-            Coordinator.appWindow.outputMessage("Túl kicsi a dobás: " + tooSmall);
-            Coordinator.appWindow.outputMessage("Nem jó sorrendben vannak a számok: " + wrongOrder);
-            if (correctCounter == 100 && wrongOrder == comp_wrongOrder && justSixSide ==
-                    comp_justSixSide
-                    && tooSmall == comp_tooSmall) {
-                Coordinator.appWindow.outputMessage("A feladat kifogástalanul meg lett oldva!");
-            } else if (correctCounter > 50) {
-                Coordinator.appWindow.outputMessage("Valami eset talán nem lett lekezelve");
-            } else {
-                Coordinator.appWindow.outputMessage("Nem igazán működik az algoritmus");
-            }
-
+            playExercise2();
         }
         if (selectedExercise == "Mit mondott a gép legtöbbször? <tömbkezelés>") {
-            int correctCounter = 0;
-            HashMap<Integer, Integer> throwAndOccurenceMap = new HashMap<Integer, Integer>();
-            for (int i = 1; i <= 100; i++) {
-
-                int randomThrow = generateRandomThrow();
-
-                if (throwAndOccurenceMap.containsKey(randomThrow)) {
-                    throwAndOccurenceMap.put(randomThrow, throwAndOccurenceMap.get(randomThrow) +
-                            1);
-                } else {
-                    throwAndOccurenceMap.put(randomThrow, 1);
-                }
-
-                int maxThrowKey = 0;
-                int maxThrowValue = 0;
-                int maxThrowValueCount = 0;
-                for (HashMap.Entry<Integer, Integer> entry : throwAndOccurenceMap.entrySet()) {
-                    if (entry.getValue() > maxThrowValue) {
-                        maxThrowKey = entry.getKey();
-                        maxThrowValue = entry.getValue();
-                    }
-                }
-                for (HashMap.Entry<Integer, Integer> entry : throwAndOccurenceMap.entrySet()) {
-                    if (entry.getValue() == maxThrowValue) {
-                        maxThrowValueCount++;
-                    }
-                }
-                if (maxThrowValueCount > 1) {
-                    maxThrowKey = 0;
-                }
-
-                playerActualAnnounceValue = generateRandomThrow();
-
-                try {
-                    player.playerTurn();
-                } catch (Exception ex) {
-                    Coordinator.appWindow.outputMessage(ex.toString());
-                    break;
-                }
-
-                Coordinator.appWindow.outputMessage("A dobás: " + randomThrow);
-                Coordinator.appWindow.outputMessage("Eddigi dobások és darabszámuk:");
-
-                String output = "";
-                for (HashMap.Entry<Integer, Integer> entry : throwAndOccurenceMap.entrySet()) {
-                    output = output + entry.getKey() + " -> " + entry.getValue() + " db  ";
-                }
-                Coordinator.appWindow.outputMessage(output);
-
-                if (playerActualAnnounceValue == 0) {
-                    Coordinator.appWindow
-                            .outputMessage("Azt mondod, hogy jelenleg több maximum is létezik a " +
-                                    "dobásértékek között!");
-                } else {
-                    Coordinator.appWindow
-                            .outputMessage("Azt mondod, hogy a legtöbbször dobott érték a: " +
-                                    playerActualAnnounceValue);
-                }
-
-                if (maxThrowKey == 0 && playerActualAnnounceValue == 0) {
-                    Coordinator.appWindow
-                            .outputMessage("Igazad volt, tényleg nincs jelenleg maximum a " +
-                                    "dobásértékek között!");
-                    correctCounter++;
-                } else if (maxThrowKey == 0 && playerActualAnnounceValue != 0) {
-                    Coordinator.appWindow
-                            .outputMessage("Nem volt igazad, jelenleg nincs maximumérték a " +
-                                    "dobásértékek között!");
-                } else if (maxThrowKey == playerActualAnnounceValue) {
-                    Coordinator.appWindow.outputMessage("Igazad volt, a jelenleg legtöbbször " +
-                            "dobott érték: " + maxThrowKey);
-                    correctCounter++;
-                } else {
-                    Coordinator.appWindow.outputMessage("Nem volt igazad, a legtöbbször dobott " +
-                            "érték: " + maxThrowKey);
-                }
-                Coordinator.appWindow.outputMessage("");
-
-            }
-            if (isRuntimeError) {
-                return;
-            }
-            Coordinator.appWindow.outputMessage("");
-            Coordinator.appWindow.outputMessage("A feladat során " + correctCounter + " jó " +
-                    "bemondásod volt a 100-ból!");
-
-            if (correctCounter == 100) {
-                Coordinator.appWindow.outputMessage("A feladat kifogástalanul meg lett oldva!");
-            } else if (correctCounter > 50) {
-                Coordinator.appWindow.outputMessage("Valami eset talán nem lett lekezelve");
-            } else {
-                Coordinator.appWindow.outputMessage("Nem igazán működik az algoritmus");
-            }
-
+            playExercise3();
         }
         if (selectedExercise == "Játék a gép ellen") {
-
-            while (playerPoints < POINTS_TO_WIN && computerPoints < POINTS_TO_WIN) {
-                turnCount++;
-                boolean isWinner = false;
-                playerActualThrowValue = 0;
-                computerActualThrowValue = 0;
-                playerActualAnnounceValue = 0;
-                computerActualAnnounceValue = 0;
-                isFirstTurn = true;
-
-                Coordinator.appWindow.outputMessage("<JÁTÉK> " + turnCount + ". kör!");
-                Coordinator.appWindow
-                        .outputMessage("<JÁTLÉK> Állás: Játékos -> " + playerPoints + " Gép -> "
-                                + computerPoints);
-
-                if (actualTurnState == turnState.PlayerTurn) {
-                    Coordinator.appWindow.outputMessage("<JÁTÉK> A játékos kezd!");
-                } else {
-                    Coordinator.appWindow.outputMessage("<JÁTÉK> A számítógép kezd!");
-                }
-                Coordinator.appWindow.outputMessage("");
-
-                while (!isWinner) {
-
-                    // Default Ágens
-                    isPlayerTrust = randomInt(0, 1) != 0;
-
-                    isComputerTrust = false;
-
-                    int actual = generateRandomThrow();
-
-                    switch (actualTurnState) {
-                        case PlayerTurn:
-                            playerActualThrowValue = actual;
-                            // Default Ágens
-                            playerActualAnnounceValue = playerActualThrowValue;
-                            Coordinator.appWindow.outputMessage("<JÁTÉK> A dobásod: " +
-                                    playerActualThrowValue);
-                            break;
-
-                        case ComputerTurn:
-                            computerActualThrowValue = actual;
-                            intelligence();
-                            Coordinator.appWindow.outputMessage("<JÁTÉK> A gép " +
-                                    computerActualAnnounceValue + " -t mond!");
-                            break;
-
-                    }
-
-                    // Futás idejű hibák kezelése
-                    try {
-                        player.playerTurn();
-                    } catch (Exception ex) {
-                        Coordinator.appWindow.outputMessage(ex.toString());
-                        isRuntimeError = true;
-                        break;
-                    }
-
-                    switch (actualTurnState) {
-                        case PlayerTurn:
-                            intelligence();
-                            if (!isComputerTrust) {
-                                Coordinator.appWindow.outputMessage("<JÁTÉK> A gép szerint " +
-                                        "hazudsz!");
-                                Coordinator.appWindow.outputMessage(" <JÁTÉK> Dobásod: " +
-                                        playerActualThrowValue
-                                        + " , és amit mondtál: " + playerActualAnnounceValue);
-                                if (playerActualAnnounceValue != playerActualThrowValue) {
-                                    playerLiedCount++;
-                                    Coordinator.appWindow.outputMessage("<JÁTÉK> Hazudtál!");
-                                    isWinner = true;
-                                    computerPoints++;
-                                    actualTurnState = turnState.ComputerTurn;
-                                } else {
-                                    playerLiedCount++;
-                                    Coordinator.appWindow.outputMessage("<JÁTÉK> Nem Hazudtál!");
-                                    isWinner = true;
-                                    playerPoints++;
-                                    actualTurnState = turnState.PlayerTurn;
-                                }
-                            } else {
-                                if (isFirstTurn) {
-                                    actualTurnState = turnState.ComputerTurn;
-                                } else if (whatIsStronger(playerActualAnnounceValue,
-                                        computerActualAnnounceValue) != 0) {
-                                    Coordinator.appWindow
-                                            .outputMessage("<JÁTÉK> Nem mondtál nagyobbat, mint " +
-                                                    "ami az ellenfélnek volt!");
-                                    isWinner = true;
-                                    computerPoints++;
-                                    actualTurnState = turnState.ComputerTurn;
-                                } else {
-                                    actualTurnState = turnState.ComputerTurn;
-                                }
-
-                            }
-                            isFirstTurn = false;
-                            break;
-
-                        case ComputerTurn:
-                            if (!isPlayerTrust) {
-                                playerNotTrustedCount++;
-                                Coordinator.appWindow.outputMessage("<JÁTÉK> A gép szerinted " +
-                                        "hazudik!");
-                                Coordinator.appWindow.outputMessage("<JÁTÉK> A gép dobása: " +
-                                        computerActualThrowValue
-                                        + " , és amit mondtál: " + computerActualAnnounceValue);
-                                if (computerActualAnnounceValue != computerActualThrowValue) {
-                                    Coordinator.appWindow.outputMessage("<JÁTÉK> Igazad volt!");
-                                    isWinner = true;
-                                    playerPoints++;
-                                    actualTurnState = turnState.PlayerTurn;
-                                } else {
-                                    Coordinator.appWindow.outputMessage("<JÁTÉK> Tévedtél!");
-                                    isWinner = true;
-                                    computerPoints++;
-                                    actualTurnState = turnState.ComputerTurn;
-                                }
-                            } else {
-                                playerTrustedCount++;
-                                Coordinator.appWindow.outputMessage("<JÁTÉK> A gép szerinted " +
-                                        "igazat mond!");
-                                if (isFirstTurn) {
-                                    actualTurnState = turnState.PlayerTurn;
-                                } else if (whatIsStronger(computerActualAnnounceValue,
-                                        playerActualAnnounceValue) != 0) {
-                                    Coordinator.appWindow.outputMessage(
-                                            "<JÁTÉK> Az ellenfél nem mondott nagyobbat, mint ami " +
-                                                    "neked volt!");
-                                    isWinner = true;
-                                    playerPoints++;
-                                    actualTurnState = turnState.PlayerTurn;
-                                } else {
-                                    actualTurnState = turnState.PlayerTurn;
-                                }
-
-                            }
-                            isFirstTurn = false;
-                            break;
-
-                    }
-                }
-                if (isRuntimeError) {
-                    break;
-                }
-                if (playerPoints != POINTS_TO_WIN && computerPoints != POINTS_TO_WIN) {
-                    Coordinator.appWindow.outputMessage("<JÁTÉK> Új kör!");
-                }
-                Coordinator.appWindow.outputMessage("");
-                Coordinator.appWindow
-                        .outputMessage
-                                ("--------------------------------------------------------------------");
-                Coordinator.appWindow.outputMessage("");
-            }
-            Coordinator.appWindow
-                    .outputMessage("<JÁTÉK> Állás: Játékos -> " + playerPoints + " Gép -> " +
-                            computerPoints);
-            if (playerPoints == POINTS_TO_WIN) {
-                Coordinator.appWindow.outputMessage("NYERT A JÁTÉKOS!");
-            } else if (computerPoints == POINTS_TO_WIN) {
-                Coordinator.appWindow.outputMessage("NYERT A GÉP!");
-            } else if (isRuntimeError) {
-                Coordinator.appWindow.outputMessage("FUTÁS IDEJŰ HIBA TÖRTÉNT, A JÁTÉK LEÁLL!");
-            }
+            playMainExercise();
         }
     }
 
-    // A gép intelligenciája a megfelelő körök szerint
-    private void intelligence() {
+    private void playExercise1() {
+        int correctCounter = 0;
+        int bashCounter = 0;
+        final int TURN_COUNT = 100;
+        for (int i = 1; i <= TURN_COUNT; i++) {
 
-		/*if(turnCount%((int)(POINTS_TO_WIN*0.15)) == 0) {
-            if(playerTrustedCount > playerNotTrustedCount && computerPoints > playerPoints) {
-				if(courageFactor<3) {
-					courageFactor++;
-				}
-			} else if(playerTrustedCount > playerNotTrustedCount && computerPoints >
-			playerPoints) {
-				if(courageFactor>-3) {
-					courageFactor--;
-				}
-			} if(playerLiedCount > playerNotLiedCount && computerPoints > playerPoints) {
-				if(courageFactor<3) {
-					courageFactor++;
-				}
-			} else if(playerLiedCount > playerNotLiedCount && computerPoints > playerPoints) {
-				if(courageFactor>-3) {
-					courageFactor--;
-				}
-			}
-		}*/
+            isPlayerTrust = randomInt(0, 1) != 0;
+
+            int randomThrow = generateRandomThrow();
+            computerActualAnnounceValue = randomThrow;
+
+            try {
+                player.playerAction();
+            } catch (Exception ex) {
+                Coordinator.appWindow.outputMessage(ex.toString());
+                break;
+            }
+
+            Coordinator.appWindow.outputMessage("A dobás: " + randomThrow);
+
+            if (isPlayerTrust) {
+                Coordinator.appWindow.outputMessage("A dobásra az mondod, hogy bash!");
+            } else {
+                Coordinator.appWindow.outputMessage("A dobásra az mondod, hogy nem bash!");
+            }
+
+            if ((isPlayerTrust == true && isItBash(randomThrow))) {
+                Coordinator.appWindow.outputMessage("Bash volt, igazad volt!");
+                correctCounter++;
+                bashCounter++;
+            } else if ((isPlayerTrust == false && !isItBash(randomThrow))) {
+                Coordinator.appWindow.outputMessage("Nem volt bash, igazad volt!");
+                correctCounter++;
+            } else if (isItBash(randomThrow)) {
+                bashCounter++;
+                Coordinator.appWindow.outputMessage("Bash volt, tévedtél!");
+            } else {
+                Coordinator.appWindow.outputMessage("Nem volt bash, tévedtél!");
+            }
+            Coordinator.appWindow.outputMessage("");
+        }
+        if (isRuntimeError) {
+            return;
+        }
+        Coordinator.appWindow.outputMessage("");
+        Coordinator.appWindow.outputMessage(
+                "A 100 dobásból " + bashCounter + " volt bash és neked " + correctCounter + "" +
+                        " helyes találatod volt!");
+        if (correctCounter == 100) {
+            Coordinator.appWindow.outputMessage("A feladat kifogástalanul meg lett oldva!");
+        } else if (correctCounter > 50) {
+            Coordinator.appWindow.outputMessage("Valami eset talán nem lett lekezelve");
+        } else {
+            Coordinator.appWindow.outputMessage("Nem igazán működik az algoritmus");
+        }
+    }
+
+    private void playExercise2() {
+        int correctCounter = 0;
+        int validCounter = 0;
+        final int TURN_COUNT = 100;
+
+        for (int i = 1; i <= TURN_COUNT; i++) {
+
+            isPlayerTrust = randomInt(0, 1) != 0;
+
+            int randomInt = randomInt(1, 99);
+            computerActualAnnounceValue = randomInt;
+
+            try {
+                player.playerAction();
+            } catch (Exception ex) {
+                Coordinator.appWindow.outputMessage(ex.toString());
+                break;
+            }
+
+            Coordinator.appWindow.outputMessage("A dobás: " + randomInt);
+
+            if (isPlayerTrust) {
+                Coordinator.appWindow.outputMessage("A dobásra az mondod, hogy érvényes!");
+            } else {
+                Coordinator.appWindow.outputMessage("A dobásra az mondod, hogy nem érvényes!");
+            }
+
+            if (isValidThrowValue(randomInt)) {
+                if (isPlayerTrust) {
+                    Coordinator.appWindow.outputMessage("Érvényes volt, igazad volt!");
+                    correctCounter++;
+                    validCounter++;
+                } else {
+                    validCounter++;
+                    Coordinator.appWindow.outputMessage("Érvényes volt, tévedtél!");
+                }
+            } else {
+                if (isPlayerTrust) {
+                    Coordinator.appWindow.outputMessage("Nem volt érvényes, tévedtél!");
+                } else {
+                    Coordinator.appWindow.outputMessage("Nem volt érvényes, igazad volt!");
+                    correctCounter++;
+                }
+            }
+            Coordinator.appWindow.outputMessage("");
+        }
+        if (isRuntimeError) {
+            return;
+        }
+        Coordinator.appWindow.outputMessage("");
+        Coordinator.appWindow.outputMessage(
+                "A 100 dobásból " + validCounter + " volt érvényes és neked " +
+                        correctCounter + " helyes találatod volt!");
+        Coordinator.appWindow.outputMessage("A rossz dobások oka előfordulásaik számával:");
+        Coordinator.appWindow.outputMessage("A kockának csak 6 oldala van: " +
+                comp_justSixSide);
+        Coordinator.appWindow.outputMessage("Túl kicsi a dobás: " + comp_tooSmall);
+        Coordinator.appWindow.outputMessage("Nem jó sorrendben vannak a számok: " +
+                comp_wrongOrder);
+        Coordinator.appWindow.outputMessage("Az általad vélt rossz dobások oka előfordulásaik" +
+                " számával:");
+        Coordinator.appWindow.outputMessage("A kockának csak 6 oldala van: " + justSixSide);
+        Coordinator.appWindow.outputMessage("Túl kicsi a dobás: " + tooSmall);
+        Coordinator.appWindow.outputMessage("Nem jó sorrendben vannak a számok: " + wrongOrder);
+        if (correctCounter == 100 && wrongOrder == comp_wrongOrder && justSixSide ==
+                comp_justSixSide
+                && tooSmall == comp_tooSmall) {
+            Coordinator.appWindow.outputMessage("A feladat kifogástalanul meg lett oldva!");
+        } else if (correctCounter > 50) {
+            Coordinator.appWindow.outputMessage("Valami eset talán nem lett lekezelve");
+        } else {
+            Coordinator.appWindow.outputMessage("Nem igazán működik az algoritmus");
+        }
+    }
+
+    private void playExercise3() {
+        int correctCounter = 0;
+        HashMap<Integer, Integer> throwAndOccurrenceMap = new HashMap<>();
+        final int TURN_COUNT = 100;
+        for (int i = 1; i <= TURN_COUNT; i++) {
+
+            int randomThrow = generateRandomThrow();
+
+            if (throwAndOccurrenceMap.containsKey(randomThrow)) {
+                throwAndOccurrenceMap.put(randomThrow, throwAndOccurrenceMap.get(randomThrow) +
+                        1);
+            } else {
+                throwAndOccurrenceMap.put(randomThrow, 1);
+            }
+
+            int maxThrowKey = 0;
+            int maxThrowValue = 0;
+            int maxThrowValueCount = 0;
+            for (HashMap.Entry<Integer, Integer> entry : throwAndOccurrenceMap.entrySet()) {
+                if (entry.getValue() > maxThrowValue) {
+                    maxThrowKey = entry.getKey();
+                    maxThrowValue = entry.getValue();
+                }
+            }
+            for (HashMap.Entry<Integer, Integer> entry : throwAndOccurrenceMap.entrySet()) {
+                if (entry.getValue() == maxThrowValue) {
+                    maxThrowValueCount++;
+                }
+            }
+            if (maxThrowValueCount > 1) {
+                maxThrowKey = 0;
+            }
+
+            playerActualAnnounceValue = generateRandomThrow();
+
+            try {
+                player.playerAction();
+            } catch (Exception ex) {
+                Coordinator.appWindow.outputMessage(ex.toString());
+                break;
+            }
+
+            Coordinator.appWindow.outputMessage("A dobás: " + randomThrow);
+            Coordinator.appWindow.outputMessage("Eddigi dobások és darabszámuk:");
+
+            String output = "";
+            for (HashMap.Entry<Integer, Integer> entry : throwAndOccurrenceMap.entrySet()) {
+                output = output + entry.getKey() + " -> " + entry.getValue() + " db  ";
+            }
+            Coordinator.appWindow.outputMessage(output);
+
+            if (playerActualAnnounceValue == 0) {
+                Coordinator.appWindow
+                        .outputMessage("Azt mondod, hogy jelenleg több maximum is létezik a " +
+                                "dobásértékek között!");
+            } else {
+                Coordinator.appWindow
+                        .outputMessage("Azt mondod, hogy a legtöbbször dobott érték a: " +
+                                playerActualAnnounceValue);
+            }
+
+            if (maxThrowKey == 0 && playerActualAnnounceValue == 0) {
+                Coordinator.appWindow
+                        .outputMessage("Igazad volt, tényleg nincs jelenleg maximum a " +
+                                "dobásértékek között!");
+                correctCounter++;
+            } else if (maxThrowKey == 0 && playerActualAnnounceValue != 0) {
+                Coordinator.appWindow
+                        .outputMessage("Nem volt igazad, jelenleg nincs maximumérték a " +
+                                "dobásértékek között!");
+            } else if (maxThrowKey == playerActualAnnounceValue) {
+                Coordinator.appWindow.outputMessage("Igazad volt, a jelenleg legtöbbször " +
+                        "dobott érték: " + maxThrowKey);
+                correctCounter++;
+            } else {
+                Coordinator.appWindow.outputMessage("Nem volt igazad, a legtöbbször dobott " +
+                        "érték: " + maxThrowKey);
+            }
+            Coordinator.appWindow.outputMessage("");
+
+        }
+        if (isRuntimeError) {
+            return;
+        }
+        Coordinator.appWindow.outputMessage("");
+        Coordinator.appWindow.outputMessage("A feladat során " + correctCounter + " jó " +
+                "bemondásod volt a 100-ból!");
+
+        if (correctCounter == 100) {
+            Coordinator.appWindow.outputMessage("A feladat kifogástalanul meg lett oldva!");
+        } else if (correctCounter > 50) {
+            Coordinator.appWindow.outputMessage("Valami eset talán nem lett lekezelve");
+        } else {
+            Coordinator.appWindow.outputMessage("Nem igazán működik az algoritmus");
+        }
+    }
+
+    private void playMainExercise() {
+
+        while (playerPoints < POINTS_TO_WIN && computerPoints < POINTS_TO_WIN) {
+            turnCount++;
+            playerActualThrowValue = 0;
+            computerActualThrowValue = 0;
+            playerActualAnnounceValue = 0;
+            computerActualAnnounceValue = 0;
+            isFirstTurn = true;
+
+            Coordinator.appWindow.outputMessage("<JÁTÉK> " + turnCount + ". kör!");
+            Coordinator.appWindow
+                    .outputMessage("<JÁTLÉK> Állás: Játékos -> " + playerPoints + " Gép -> "
+                            + computerPoints);
+
+            if (actualTurnState == turnState.PlayerTurn) {
+                Coordinator.appWindow.outputMessage("<JÁTÉK> A játékos kezd!");
+            } else {
+                Coordinator.appWindow.outputMessage("<JÁTÉK> A számítógép kezd!");
+            }
+            Coordinator.appWindow.outputMessage("");
+
+            while (true) {
+
+                beforePlayerActionMainExercise();
+
+                try {
+                    player.playerAction();
+                } catch (Exception ex) {
+                    Coordinator.appWindow.outputMessage(ex.toString());
+                    isRuntimeError = true;
+                    break;
+                }
+
+                boolean isWinner = afterPlayerActionMainExercise();
+
+                if(isWinner) {
+                    break;
+                }
+            }
+            if (isRuntimeError) {
+                break;
+            }
+            if (playerPoints != POINTS_TO_WIN && computerPoints != POINTS_TO_WIN) {
+                Coordinator.appWindow.outputMessage("<JÁTÉK> Új kör!");
+            }
+            Coordinator.appWindow.outputMessage("");
+            Coordinator.appWindow
+                    .outputMessage
+                            ("--------------------------------------------------------------------");
+            Coordinator.appWindow.outputMessage("");
+        }
+        Coordinator.appWindow
+                .outputMessage("<JÁTÉK> Állás: Játékos -> " + playerPoints + " Gép -> " +
+                        computerPoints);
+        if (playerPoints == POINTS_TO_WIN) {
+            Coordinator.appWindow.outputMessage("NYERT A JÁTÉKOS!");
+        } else if (computerPoints == POINTS_TO_WIN) {
+            Coordinator.appWindow.outputMessage("NYERT A GÉP!");
+        } else if (isRuntimeError) {
+            Coordinator.appWindow.outputMessage("FUTÁS IDEJŰ HIBA TÖRTÉNT, A JÁTÉK LEÁLL!");
+        }
+    }
+
+    private void beforePlayerActionMainExercise() {
+        isPlayerTrust = randomInt(0, 1) != 0;
+
+        isComputerTrust = false;
+
+        int actual = generateRandomThrow();
 
         switch (actualTurnState) {
             case PlayerTurn:
+                playerActualThrowValue = actual;
+                playerActualAnnounceValue = playerActualThrowValue;
+                Coordinator.appWindow.outputMessage("<JÁTÉK> A dobásod: " +
+                        playerActualThrowValue);
+                break;
 
-                switch (playerActualAnnounceValue) {
-                    case 61:
-                        throwingOccurrenceFrom61To65.set(0, throwingOccurrenceFrom61To65.get(0) +
-                                1);
-                        if (throwingOccurrenceFrom61To65.get(0) >= COMPUTER_AI_TRESHOLD) {
-                            Coordinator.appWindow.outputMessage("<GÉP> Nem hiszem el!");
-                            isComputerTrust = false;
-                            return;
-                        }
-                        break;
-                    case 62:
-                        throwingOccurrenceFrom61To65.set(1, throwingOccurrenceFrom61To65.get(1) +
-                                1);
-                        if (throwingOccurrenceFrom61To65.get(1) >= COMPUTER_AI_TRESHOLD) {
-                            Coordinator.appWindow.outputMessage("<GÉP> Nem hiszem el!");
-                            isComputerTrust = false;
-                            return;
-                        }
-                        break;
-                    case 63:
-                        throwingOccurrenceFrom61To65.set(2, throwingOccurrenceFrom61To65.get(2) +
-                                1);
-                        if (throwingOccurrenceFrom61To65.get(2) >= COMPUTER_AI_TRESHOLD) {
-                            Coordinator.appWindow.outputMessage("<GÉP> Nem hiszem el!");
-                            isComputerTrust = false;
-                            return;
-                        }
-                        break;
-                    case 64:
-                        throwingOccurrenceFrom61To65.set(3, throwingOccurrenceFrom61To65.get(3) +
-                                1);
-                        if (throwingOccurrenceFrom61To65.get(3) >= COMPUTER_AI_TRESHOLD) {
-                            Coordinator.appWindow.outputMessage("<GÉP> Nem hiszem el!");
-                            isComputerTrust = false;
-                            return;
-                        }
-                        break;
-                    case 65:
-                        throwingOccurrenceFrom61To65.set(4, throwingOccurrenceFrom61To65.get(4) +
-                                1);
-                        if (throwingOccurrenceFrom61To65.get(4) >= COMPUTER_AI_TRESHOLD) {
-                            Coordinator.appWindow.outputMessage("<GÉP> Nem hiszem el!");
-                            isComputerTrust = false;
-                            return;
-                        }
-                        break;
-                }
+            case ComputerTurn:
+                computerActualThrowValue = actual;
+                intelligence();
+                Coordinator.appWindow.outputMessage("<JÁTÉK> A gép " +
+                        computerActualAnnounceValue + " -t mond!");
+                break;
 
-                if (playerActualAnnounceValue == 21) {
-                    Coordinator.appWindow.outputMessage("<GÉP> A 21 - et nem hiszem el!");
-                    isComputerTrust = false;
-                } else if (whatIsStronger(playerActualAnnounceValue, computerActualAnnounceValue)
-                        != 0 && !isFirstTurn) {
-                    Coordinator.appWindow.outputMessage("<GÉP> Elhiszem, mert nem mondasz " +
-                            "nagyobbat mint én!");
-                    isComputerTrust = true;
-                } else if (isItBash(playerActualAnnounceValue)) {
-                    int chance = rnd.nextInt(10) + 1;
-                    if (playerActualAnnounceValue == 11) {
-                        if (chance > (6 - courageFactor)) {
-                            Coordinator.appWindow.outputMessage("<GÉP> Elhiszem a bash - t!");
-                            isComputerTrust = true;
-                        } else {
-                            Coordinator.appWindow.outputMessage("<GÉP> Nem hiszem el a bash - t!");
-                            isComputerTrust = false;
-                        }
-                    } else if (playerActualAnnounceValue == 22) {
-                        if (chance > (8 - courageFactor)) {
-                            Coordinator.appWindow.outputMessage("<GÉP> Elhiszem a bash - t!");
-                            isComputerTrust = true;
-                        } else {
-                            Coordinator.appWindow.outputMessage("<GÉP> Nem hiszem el a bash - t!");
-                            isComputerTrust = false;
-                        }
-                    } else if (playerActualAnnounceValue == 33) {
-                        if (chance > (9 - courageFactor)) {
-                            Coordinator.appWindow.outputMessage("<GÉP> Elhiszem a bash - t!");
-                            isComputerTrust = true;
-                        } else {
-                            Coordinator.appWindow.outputMessage("<GÉP> Nem hiszem el a bash - t!");
-                            isComputerTrust = false;
-                        }
+        }
+    }
+
+    private boolean afterPlayerActionMainExercise() {
+        boolean isWinner = false;
+        switch (actualTurnState) {
+            case PlayerTurn:
+                intelligence();
+                if (!isComputerTrust) {
+                    Coordinator.appWindow.outputMessage("<JÁTÉK> A gép szerint " +
+                            "hazudsz!");
+                    Coordinator.appWindow.outputMessage(" <JÁTÉK> Dobásod: " +
+                            playerActualThrowValue
+                            + " , és amit mondtál: " + playerActualAnnounceValue);
+                    if (playerActualAnnounceValue != playerActualThrowValue) {
+                        Coordinator.appWindow.outputMessage("<JÁTÉK> Hazudtál!");
+                        isWinner = true;
+                        computerPoints++;
+                        actualTurnState = turnState.ComputerTurn;
                     } else {
-                        Coordinator.appWindow.outputMessage("<GÉP> Nem hiszem el a bash - t!");
-                        isComputerTrust = false;
-                    }
-                } else if (isFirstTurn) {
-                    int chance = rnd.nextInt(10) + 1;
-                    if (chance < (8 + courageFactor)) {
-                        Coordinator.appWindow.outputMessage("<GÉP> Elhiszem");
-                        isComputerTrust = true;
-                    } else {
-                        if (playerActualAnnounceValue == 32 || playerActualAnnounceValue == 41 ||
-                                playerActualAnnounceValue == 42 || playerActualAnnounceValue == 43
-                                || playerActualAnnounceValue == 51 || playerActualAnnounceValue
-                                == 52 || playerActualAnnounceValue == 53) {
-                            Coordinator.appWindow.outputMessage("<GÉP> Elhiszem");
-                            isComputerTrust = true;
-                        } else {
-                            Coordinator.appWindow.outputMessage("<GÉP> Nem hiszem el ezt az első " +
-                                    "dobást!");
-                            isComputerTrust = false;
-                        }
-                    }
-                } else if (Integer.toString(playerActualAnnounceValue).charAt(0) == 6) {
-                    int chance = rnd.nextInt(10) + 1;
-                    if (chance > (7 - courageFactor)) {
-                        Coordinator.appWindow.outputMessage("<GÉP> Nem hiszem el, ez nekem túl " +
-                                "sok!");
-                        isComputerTrust = false;
-                    } else {
-                        Coordinator.appWindow.outputMessage("<GÉP> Elhiszem");
-                        isComputerTrust = true;
-                    }
-                } else if (playerActualAnnounceValue == nextBiggerThrow
-                        (computerActualAnnounceValue)) {
-                    int chance = rnd.nextInt(10) + 1;
-                    if (chance < (6 - courageFactor)) {
-                        Coordinator.appWindow.outputMessage("<GÉP> Nem hiszem el!");
-                        isComputerTrust = false;
-                    } else {
-                        Coordinator.appWindow.outputMessage("<GÉP> Elhiszem!");
-                        isComputerTrust = true;
-                    }
-                } else if (playerActualAnnounceValue == nextBiggerThrow(nextBiggerThrow
-                        (computerActualAnnounceValue))) {
-                    int chance = rnd.nextInt(10) + 1;
-                    if (chance < (4 - courageFactor)) {
-                        Coordinator.appWindow.outputMessage("<GÉP> Nem hiszem el!");
-                        isComputerTrust = false;
-                    } else {
-                        Coordinator.appWindow.outputMessage("<GÉP> Elhiszem!");
-                        isComputerTrust = true;
+                        Coordinator.appWindow.outputMessage("<JÁTÉK> Nem Hazudtál!");
+                        isWinner = true;
+                        playerPoints++;
+                        actualTurnState = turnState.PlayerTurn;
                     }
                 } else {
-                    Coordinator.appWindow.outputMessage("<GÉP> Elhiszem!");
-                    isComputerTrust = true;
+                    if (isFirstTurn) {
+                        actualTurnState = turnState.ComputerTurn;
+                    } else if (whatIsStronger(playerActualAnnounceValue,
+                            computerActualAnnounceValue) != 0) {
+                        Coordinator.appWindow
+                                .outputMessage("<JÁTÉK> Nem mondtál nagyobbat, mint " +
+                                        "ami az ellenfélnek volt!");
+                        isWinner = true;
+                        computerPoints++;
+                        actualTurnState = turnState.ComputerTurn;
+                    } else {
+                        actualTurnState = turnState.ComputerTurn;
+                    }
+
                 }
+                isFirstTurn = false;
+                break;
+
+            case ComputerTurn:
+                if (!isPlayerTrust) {
+                    Coordinator.appWindow.outputMessage("<JÁTÉK> A gép szerinted " +
+                            "hazudik!");
+                    Coordinator.appWindow.outputMessage("<JÁTÉK> A gép dobása: " +
+                            computerActualThrowValue
+                            + " , és amit mondtál: " + computerActualAnnounceValue);
+                    if (computerActualAnnounceValue != computerActualThrowValue) {
+                        Coordinator.appWindow.outputMessage("<JÁTÉK> Igazad volt!");
+                        isWinner = true;
+                        playerPoints++;
+                        actualTurnState = turnState.PlayerTurn;
+                    } else {
+                        Coordinator.appWindow.outputMessage("<JÁTÉK> Tévedtél!");
+                        isWinner = true;
+                        computerPoints++;
+                        actualTurnState = turnState.ComputerTurn;
+                    }
+                } else {
+                    Coordinator.appWindow.outputMessage("<JÁTÉK> A gép szerinted " +
+                            "igazat mond!");
+                    if (isFirstTurn) {
+                        actualTurnState = turnState.PlayerTurn;
+                    } else if (whatIsStronger(computerActualAnnounceValue,
+                            playerActualAnnounceValue) != 0) {
+                        Coordinator.appWindow.outputMessage(
+                                "<JÁTÉK> Az ellenfél nem mondott nagyobbat, mint ami " +
+                                        "neked volt!");
+                        isWinner = true;
+                        playerPoints++;
+                        actualTurnState = turnState.PlayerTurn;
+                    } else {
+                        actualTurnState = turnState.PlayerTurn;
+                    }
+
+                }
+                isFirstTurn = false;
+                break;
+        }
+        return isWinner;
+    }
+
+    private void intelligence() {
+
+        switch (actualTurnState) {
+            case PlayerTurn:
+                playerTurnIntelligence();
                 break;
             case ComputerTurn:
-                isComputerTrust = true;
-                if (whatIsStronger(computerActualThrowValue, playerActualAnnounceValue) == 0) {
-                    if (isFirstTurn) {
-                        int chance = rnd.nextInt(10) + 1;
-                        if (chance > (8 - courageFactor) && !isItBash(computerActualThrowValue)) {
-                            chance = rnd.nextInt(3) + 1;
-                            int tmp = computerActualThrowValue;
-                            for (int i = 0; i < chance; i++) {
-                                tmp = nextBiggerThrow(tmp);
-                            }
-                            computerActualAnnounceValue = tmp;
-                        } else {
-                            computerActualAnnounceValue = computerActualThrowValue;
-                        }
-                    } else {
-                        computerActualAnnounceValue = computerActualThrowValue;
-                    }
+                computerTurnIntelligence();
+                break;
+        }
+
+    }
+
+    private void playerTurnIntelligence() {
+        isTrustChangedByActualAnnounceValueFrom61To65();
+
+        if(isTrustChangedByActualAnnounceValueFrom61To65()) {
+            return;
+        }
+
+        if (playerActualAnnounceValue == 21) {
+            Coordinator.appWindow.outputMessage("<GÉP> A 21 - et nem hiszem el!");
+            isComputerTrust = false;
+        } else if (whatIsStronger(playerActualAnnounceValue, computerActualAnnounceValue)
+                != 0 && !isFirstTurn) {
+            Coordinator.appWindow.outputMessage("<GÉP> Elhiszem, mert nem mondasz " +
+                    "nagyobbat mint én!");
+            isComputerTrust = true;
+        } else if (isItBash(playerActualAnnounceValue)) {
+            int chance = rnd.nextInt(10) + 1;
+            if (playerActualAnnounceValue == 11) {
+                if (chance > (6)) {
+                    Coordinator.appWindow.outputMessage("<GÉP> Elhiszem a bash - t!");
+                    isComputerTrust = true;
                 } else {
-                    int chance = rnd.nextInt(4) + 1;
+                    Coordinator.appWindow.outputMessage("<GÉP> Nem hiszem el a bash - t!");
+                    isComputerTrust = false;
+                }
+            } else if (playerActualAnnounceValue == 22) {
+                if (chance > (8)) {
+                    Coordinator.appWindow.outputMessage("<GÉP> Elhiszem a bash - t!");
+                    isComputerTrust = true;
+                } else {
+                    Coordinator.appWindow.outputMessage("<GÉP> Nem hiszem el a bash - t!");
+                    isComputerTrust = false;
+                }
+            } else if (playerActualAnnounceValue == 33) {
+                if (chance > (9)) {
+                    Coordinator.appWindow.outputMessage("<GÉP> Elhiszem a bash - t!");
+                    isComputerTrust = true;
+                } else {
+                    Coordinator.appWindow.outputMessage("<GÉP> Nem hiszem el a bash - t!");
+                    isComputerTrust = false;
+                }
+            } else {
+                Coordinator.appWindow.outputMessage("<GÉP> Nem hiszem el a bash - t!");
+                isComputerTrust = false;
+            }
+        } else if (isFirstTurn) {
+            int chance = rnd.nextInt(10) + 1;
+            if (chance < (8)) {
+                Coordinator.appWindow.outputMessage("<GÉP> Elhiszem");
+                isComputerTrust = true;
+            } else {
+                if (playerActualAnnounceValue == 32 || playerActualAnnounceValue == 41 ||
+                        playerActualAnnounceValue == 42 || playerActualAnnounceValue == 43
+                        || playerActualAnnounceValue == 51 || playerActualAnnounceValue
+                        == 52 || playerActualAnnounceValue == 53) {
+                    Coordinator.appWindow.outputMessage("<GÉP> Elhiszem");
+                    isComputerTrust = true;
+                } else {
+                    Coordinator.appWindow.outputMessage("<GÉP> Nem hiszem el ezt az első " +
+                            "dobást!");
+                    isComputerTrust = false;
+                }
+            }
+        } else if (Integer.toString(playerActualAnnounceValue).charAt(0) == 6) {
+            int chance = rnd.nextInt(10) + 1;
+            if (chance > (7)) {
+                Coordinator.appWindow.outputMessage("<GÉP> Nem hiszem el, ez nekem túl " +
+                        "sok!");
+                isComputerTrust = false;
+            } else {
+                Coordinator.appWindow.outputMessage("<GÉP> Elhiszem");
+                isComputerTrust = true;
+            }
+        } else if (playerActualAnnounceValue == nextBiggerThrow
+                (computerActualAnnounceValue)) {
+            int chance = rnd.nextInt(10) + 1;
+            if (chance < (6)) {
+                Coordinator.appWindow.outputMessage("<GÉP> Nem hiszem el!");
+                isComputerTrust = false;
+            } else {
+                Coordinator.appWindow.outputMessage("<GÉP> Elhiszem!");
+                isComputerTrust = true;
+            }
+        } else if (playerActualAnnounceValue == nextBiggerThrow(nextBiggerThrow
+                (computerActualAnnounceValue))) {
+            int chance = rnd.nextInt(10) + 1;
+            if (chance < (4)) {
+                Coordinator.appWindow.outputMessage("<GÉP> Nem hiszem el!");
+                isComputerTrust = false;
+            } else {
+                Coordinator.appWindow.outputMessage("<GÉP> Elhiszem!");
+                isComputerTrust = true;
+            }
+        } else {
+            Coordinator.appWindow.outputMessage("<GÉP> Elhiszem!");
+            isComputerTrust = true;
+        }
+        return;
+    }
+
+    private boolean isTrustChangedByActualAnnounceValueFrom61To65() {
+        boolean isTrustChangedByActualAnnounceValue = false;
+        switch (playerActualAnnounceValue) {
+            case 61:
+                throwingOccurrenceFrom61To65.set(0, throwingOccurrenceFrom61To65.get(0) +
+                        1);
+                if (throwingOccurrenceFrom61To65.get(0) >= COMPUTER_AI_TRESHOLD) {
+                    Coordinator.appWindow.outputMessage("<GÉP> Nem hiszem el!");
+                    isComputerTrust = false;
+                    isTrustChangedByActualAnnounceValue = true;
+                }
+                break;
+            case 62:
+                throwingOccurrenceFrom61To65.set(1, throwingOccurrenceFrom61To65.get(1) +
+                        1);
+                if (throwingOccurrenceFrom61To65.get(1) >= COMPUTER_AI_TRESHOLD) {
+                    Coordinator.appWindow.outputMessage("<GÉP> Nem hiszem el!");
+                    isComputerTrust = false;
+                    isTrustChangedByActualAnnounceValue = true;
+                }
+                break;
+            case 63:
+                throwingOccurrenceFrom61To65.set(2, throwingOccurrenceFrom61To65.get(2) +
+                        1);
+                if (throwingOccurrenceFrom61To65.get(2) >= COMPUTER_AI_TRESHOLD) {
+                    Coordinator.appWindow.outputMessage("<GÉP> Nem hiszem el!");
+                    isComputerTrust = false;
+                    isTrustChangedByActualAnnounceValue = true;
+                }
+                break;
+            case 64:
+                throwingOccurrenceFrom61To65.set(3, throwingOccurrenceFrom61To65.get(3) +
+                        1);
+                if (throwingOccurrenceFrom61To65.get(3) >= COMPUTER_AI_TRESHOLD) {
+                    Coordinator.appWindow.outputMessage("<GÉP> Nem hiszem el!");
+                    isComputerTrust = false;
+                    isTrustChangedByActualAnnounceValue = true;
+                }
+                break;
+            case 65:
+                throwingOccurrenceFrom61To65.set(4, throwingOccurrenceFrom61To65.get(4) +
+                        1);
+                if (throwingOccurrenceFrom61To65.get(4) >= COMPUTER_AI_TRESHOLD) {
+                    Coordinator.appWindow.outputMessage("<GÉP> Nem hiszem el!");
+                    isComputerTrust = false;
+                    isTrustChangedByActualAnnounceValue = true;
+                }
+                break;
+        }
+
+        return isTrustChangedByActualAnnounceValue;
+    }
+
+    private void computerTurnIntelligence() {
+        isComputerTrust = true;
+        if (whatIsStronger(computerActualThrowValue, playerActualAnnounceValue) == 0) {
+            if (isFirstTurn) {
+                int chance = rnd.nextInt(10) + 1;
+                if (chance > (8) && !isItBash(computerActualThrowValue)) {
+                    chance = rnd.nextInt(3) + 1;
                     int tmp = computerActualThrowValue;
-                    while (whatIsStronger(tmp, playerActualAnnounceValue) == 1) {
-                        tmp = nextBiggerThrow(tmp);
-                    }
                     for (int i = 0; i < chance; i++) {
                         tmp = nextBiggerThrow(tmp);
                     }
                     computerActualAnnounceValue = tmp;
+                } else {
+                    computerActualAnnounceValue = computerActualThrowValue;
                 }
-                break;
+            } else {
+                computerActualAnnounceValue = computerActualThrowValue;
+            }
+        } else {
+            int chance = rnd.nextInt(4) + 1;
+            int tmp = computerActualThrowValue;
+            while (whatIsStronger(tmp, playerActualAnnounceValue) == 1) {
+                tmp = nextBiggerThrow(tmp);
+            }
+            for (int i = 0; i < chance; i++) {
+                tmp = nextBiggerThrow(tmp);
+            }
+            computerActualAnnounceValue = tmp;
         }
-
     }
 
     public int whatIsStronger(int firstThrow, int secondThrow) {
@@ -1033,7 +1042,7 @@ public class Bash implements BashInterface {
 
         int firstDigit = randomInt(1, 6);
         int secondDigit = randomInt(1, 6);
-        int actualThrow = 0;
+        int actualThrow;
 
         if (firstDigit > secondDigit) {
             actualThrow = Integer.parseInt(Integer.toString(firstDigit) + Integer.toString
@@ -1047,15 +1056,8 @@ public class Bash implements BashInterface {
         return actualThrow;
     }
 
-
     @Override
     public void announce(int myThrow) {
-        if (selectedExercise == "Bash - t dobott az ellenfél? <elágazás>") {
-
-        }
-        if (selectedExercise == "Érvényes volt a bemondás? <elágazás>") {
-
-        }
         if (selectedExercise == "Mit mondott a gép legtöbbször? <tömbkezelés>") {
             playerActualAnnounceValue = myThrow;
         }

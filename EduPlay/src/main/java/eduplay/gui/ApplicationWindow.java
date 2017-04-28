@@ -282,7 +282,7 @@ public class ApplicationWindow {
 		outputTextField.setText("");
 	}
 
-	public String getPlayerTurnCode() {
+	public String getPlayerActionCode() {
 		return inputTextField.getText().toString();
 	}
 	

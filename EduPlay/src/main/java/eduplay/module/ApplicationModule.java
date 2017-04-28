@@ -18,8 +18,6 @@ public interface ApplicationModule {
 
 	void print(String s);
 	
-	//----------ezeket nem hívhatja meg a felhasználó, de egyelőre így marad------------
-	
 	ArrayList<String> getExercises();
 	
 	void setExercise(String exercise);
