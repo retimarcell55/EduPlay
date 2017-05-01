@@ -46,7 +46,7 @@ public class MainWindow {
 		modulesComboBox.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 		mainFrame.getContentPane().add(modulesComboBox,BorderLayout.PAGE_START);
 		
-		moreButton = new JButton("T�bbet a modulr�l");
+		moreButton = new JButton("Többet a modulról");
 		moreButton.setPreferredSize(new Dimension(150,150));
 		mainFrame.getContentPane().add(moreButton,BorderLayout.LINE_START);
 		
@@ -54,7 +54,7 @@ public class MainWindow {
 		startButton.setBackground(Color.CYAN);
 		startButton.addActionListener(e -> {
 
-            if(modulesComboBox.getSelectedItem().toString() != "V�lassz modult!") {
+            if(modulesComboBox.getSelectedItem().toString() != "Válassz modult!") {
                 mainFrame.dispose();
                 Coordinator.openApplication(modulesComboBox.getSelectedItem().toString());
             }
@@ -62,11 +62,11 @@ public class MainWindow {
         });
 		mainFrame.getContentPane().add(startButton,BorderLayout.CENTER);
 		
-		aboutButton = new JButton("A Programr�l");
+		aboutButton = new JButton("A Programról");
 		aboutButton.setPreferredSize(new Dimension(150,150));
 		mainFrame.getContentPane().add(aboutButton,BorderLayout.LINE_END);
 		
-		exitButton = new JButton("Kil�p�s");
+		exitButton = new JButton("Kilépés");
 		exitButton.setBackground(Color.RED);
 		exitButton.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 		exitButton.addActionListener(e -> mainFrame.dispose());

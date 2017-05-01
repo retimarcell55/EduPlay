@@ -47,7 +47,7 @@ public class FunctionWindow {
 		
 		mainPanel = new JPanel(new BorderLayout(0,0));
 		
-		functionLabel = new JLabel("F�ggv�nyek �r�sa:");
+		functionLabel = new JLabel("Függvények írása:");
 		mainPanel.add(functionLabel,BorderLayout.NORTH);
 		
 		inputTextArea = new RSyntaxTextArea();
@@ -73,30 +73,25 @@ public class FunctionWindow {
 		JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		mainPanel.add(mainScrollPane,BorderLayout.CENTER);
 		
-		saveButton = new JButton("F�ggv�nyek ment�se");
-		saveButton.addActionListener(new ActionListener() {
+		saveButton = new JButton("Függvények mentése");
+		saveButton.addActionListener(e -> {
+            BufferedWriter writer;
+            try {
+                writer = new BufferedWriter(new FileWriter(Coordinator.FILE_SOURCE + "/Helper.txt", false));
+                inputTextArea.write(writer);
+                writer.close();
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				BufferedWriter writer;
-				try {
-					writer = new BufferedWriter(new FileWriter(Coordinator.FILE_SOURCE + "/Helper.txt", false));
-					inputTextArea.write(writer);
-					writer.close();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
-				
-			}
-			
-		});
+
+        });
 		mainPanel.add(saveButton,BorderLayout.SOUTH);
 		
 		mainFrame.getContentPane().add(mainPanel);
 		
-		mainFrame.setTitle("F�ggv�nyek");
+		mainFrame.setTitle("Függvények");
 		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
 		mainFrame.setBounds(dimension.width/2-700/2, dimension.height/2-400/2, 700, 400);
 		

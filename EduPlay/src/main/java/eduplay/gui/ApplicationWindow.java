@@ -80,65 +80,38 @@ public class ApplicationWindow {
 		exerciseMenu = new JMenu("Feladatok");
 		
 		exercises = Coordinator.appModule.getExercises();
-		exerciseMenuItems = new ArrayList<JMenuItem>();
+		exerciseMenuItems = new ArrayList<>();
 		
 		for(String exercise : exercises) {
 			JMenuItem newMenuItem = new JMenuItem(exercise);
-			newMenuItem.addActionListener(new ActionListener() {
-			    public void actionPerformed(ActionEvent ev) {
-			    	Coordinator.appModule.setExercise(newMenuItem.getText().toString());
-			    	selectedExerciseLabel.setText("   Aktualis feladat: " + Coordinator.appModule.getSelectedExercise().toString());
-			    }
-			});
+			newMenuItem.addActionListener(ev -> {
+                Coordinator.appModule.setExercise(newMenuItem.getText().toString());
+                selectedExerciseLabel.setText("   Aktuális feladat: " + Coordinator.appModule.getSelectedExercise().toString());
+            });
 			exerciseMenuItems.add(newMenuItem);
 			
 			exerciseMenu.add(newMenuItem);
 		}
 		
-		descriptionButton = new JButton("Aktu�lis feladat le�r�sa");
-		descriptionButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(mainFrame, Coordinator.appModule.getDescription(), "Feladatle�r�s",
-						JOptionPane.INFORMATION_MESSAGE);
-			}
-			
-		});
+		descriptionButton = new JButton("Aktuális feladat leírása");
+		descriptionButton.addActionListener(e -> JOptionPane.showMessageDialog(mainFrame, Coordinator.appModule.getDescription(), "Feladatleírás",
+                JOptionPane.INFORMATION_MESSAGE));
 		
-		helpButton = new JButton("Seg�ts�g");
-		helpButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(mainFrame, Coordinator.appModule.getHelp(), "Seg�ts�g",
-						JOptionPane.INFORMATION_MESSAGE);
-			}
-			
-		});
+		helpButton = new JButton("Segítség");
+		helpButton.addActionListener(e -> JOptionPane.showMessageDialog(mainFrame, Coordinator.appModule.getHelp(), "Segítség",
+                JOptionPane.INFORMATION_MESSAGE));
 		
-		selectedExerciseLabel = new JLabel("Aktu�lis feladat: " + Coordinator.appModule.getSelectedExercise().toString());
+		selectedExerciseLabel = new JLabel("Aktuális feladat: " + Coordinator.appModule.getSelectedExercise().toString());
 		selectedExerciseLabel.setBorder(new EmptyBorder(0, 0, 0, 100));
 		
-		functionButton = new JButton("F�ggv�nyek");
-		functionButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-				EventQueue.invokeLater(new Runnable() {
-					public void run() {
-						try {
-							FunctionWindow functionWindow = new FunctionWindow();
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
-				});
-				
-			}
-			
-		});
+		functionButton = new JButton("Függvények");
+		functionButton.addActionListener(e -> EventQueue.invokeLater(() -> {
+try {
+FunctionWindow functionWindow = new FunctionWindow();
+} catch (Exception e12) {
+e12.printStackTrace();
+}
+}));
 
 		mainMenuBar.add(exerciseMenu);
 		mainMenuBar.add(descriptionButton);
@@ -170,43 +143,38 @@ public class ApplicationWindow {
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		inputPanel.add(inputScrollPane, BorderLayout.CENTER);
 
-		compileButton = new JButton("Ford�t�s");
-		compileButton.addActionListener(new ActionListener() {
+		compileButton = new JButton("Fordítás");
+		compileButton.addActionListener(arg0 -> {
 
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-					
-				BufferedWriter writer;
-				try {
-					if((!inputTextField.getText().trim().equals(""))) {
-						writer = new BufferedWriter(new FileWriter(Coordinator.FILE_SOURCE + "/Player.txt", false));
-						inputTextField.write(writer);
-						writer.close();
-					}
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
-				try {
-					Coordinator.compileAndStartExercise();
-				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (InstantiationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+            BufferedWriter writer;
+            try {
+                if((!inputTextField.getText().trim().equals(""))) {
+                    writer = new BufferedWriter(new FileWriter(Coordinator.FILE_SOURCE + "/Player.txt", false));
+                    inputTextField.write(writer);
+                    writer.close();
+                }
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
 
-			}
+            try {
+                Coordinator.compileAndStartExercise();
+            } catch (ClassNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
 
-		});
+        });
 		inputPanel.add(compileButton, BorderLayout.PAGE_END);
 
 		mainPanel.add(inputPanel);
@@ -227,43 +195,24 @@ public class ApplicationWindow {
 
 		settingsPanel = new JPanel(new BorderLayout());
 
-		rulesButton = new JButton("Szab�lyok");
+		rulesButton = new JButton("Szabályok");
 		rulesButton.setPreferredSize(new Dimension(250, 50));
-		rulesButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(mainFrame, Coordinator.appModule.getRules(), "Szab�lyok",
-						JOptionPane.INFORMATION_MESSAGE);
-			}
-
-		});
+		rulesButton.addActionListener(e -> JOptionPane.showMessageDialog(mainFrame, Coordinator.appModule.getRules(), "Szabályok",
+                JOptionPane.INFORMATION_MESSAGE));
 		settingsPanel.add(rulesButton, BorderLayout.LINE_START);
 
 		apiButton = new JButton("API");
-		apiButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(mainFrame, Coordinator.appModule.getApi(), "API",
-						JOptionPane.INFORMATION_MESSAGE);
-			}
-
-		});
+		apiButton.addActionListener(e -> JOptionPane.showMessageDialog(mainFrame, Coordinator.appModule.getApi(), "API",
+                JOptionPane.INFORMATION_MESSAGE));
 		settingsPanel.add(apiButton, BorderLayout.CENTER);
 
-		exitButton = new JButton("Kil�p�s");
+		exitButton = new JButton("Kilépés");
 		exitButton.setPreferredSize(new Dimension(250, 50));
-		exitButton.addActionListener(new ActionListener() {
+		exitButton.addActionListener(e -> {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				mainFrame.dispose();
-				Coordinator.returnFromApplicationWindow();
-			}
-
-		});
+            mainFrame.dispose();
+            Coordinator.returnFromApplicationWindow();
+        });
 		settingsPanel.add(exitButton, BorderLayout.LINE_END);
 
 		mainPanel.add(settingsPanel);
