@@ -1,17 +1,12 @@
 package eduplay.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Set;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 import eduplay.connection.Coordinator;
 
@@ -21,8 +16,8 @@ public class MainWindow {
 	private JComboBox<String> modulesComboBox;
 	private JButton moreButton;
 	private JButton startButton;
-	private JButton exitButton;
 	private JButton aboutButton;
+	private JLabel moduleLabel;
 	
 	private Set<String> moduleNames;
 	
@@ -36,21 +31,32 @@ public class MainWindow {
 		
 		mainFrame = new JFrame();
 		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-		mainFrame.setBounds(dimension.width/2-600/2, dimension.height/2-300/2, 600, 300);
+		mainFrame.setBounds(dimension.width/2-600/2, dimension.height/2-300/2, 400, 200);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.setTitle("EduPlay");
 		mainFrame.setResizable(false);
-		
+
+		JPanel mainPanel = new JPanel();
+		mainPanel.setLayout(new BorderLayout(10,10));
+		mainPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+
+        Container topContainer = new Container();
+        topContainer.setLayout(new BorderLayout(10,10));
+
+		moduleLabel = new JLabel("Válassz modult!");
+
+		topContainer.add(moduleLabel,BorderLayout.PAGE_START);
+
 		modulesComboBox = new JComboBox(moduleNames.toArray());
 		modulesComboBox.setSelectedIndex(0);
-		modulesComboBox.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
-		mainFrame.getContentPane().add(modulesComboBox,BorderLayout.PAGE_START);
-		
-		moreButton = new JButton("Többet a modulról");
-		moreButton.setPreferredSize(new Dimension(150,150));
-		mainFrame.getContentPane().add(moreButton,BorderLayout.LINE_START);
-		
-		startButton = new JButton("Indítás");
+        topContainer.add(modulesComboBox,BorderLayout.CENTER);
+
+        mainPanel.add(topContainer,BorderLayout.NORTH);
+
+        JPanel middlePanel = new JPanel();
+        middlePanel.setLayout(new BorderLayout(10,10));
+
+		startButton = new JButton("Modul Indítása");
 		startButton.setBackground(Color.CYAN);
 		startButton.addActionListener(e -> {
 
@@ -60,18 +66,27 @@ public class MainWindow {
             }
 
         });
-		mainFrame.getContentPane().add(startButton,BorderLayout.CENTER);
+
+        startButton.setPreferredSize(new Dimension(175,30));
+        middlePanel.add(startButton, BorderLayout.LINE_START);
+
+        moreButton = new JButton("Többet a modulról");
+        moreButton.setPreferredSize(new Dimension(175,30));
+        middlePanel.add(moreButton,BorderLayout.LINE_END);
+
+        mainPanel.add(middlePanel,BorderLayout.CENTER);
+
+        Container bottomContainer = new Container();
+        bottomContainer.setLayout(new BorderLayout(10,10));
 		
-		aboutButton = new JButton("A Programról");
-		aboutButton.setPreferredSize(new Dimension(150,150));
-		mainFrame.getContentPane().add(aboutButton,BorderLayout.LINE_END);
-		
-		exitButton = new JButton("Kilépés");
-		exitButton.setBackground(Color.RED);
-		exitButton.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
-		exitButton.addActionListener(e -> mainFrame.dispose());
-		mainFrame.getContentPane().add(exitButton,BorderLayout.PAGE_END);
-		
+		aboutButton = new JButton("Többet az EduPlay-ről");
+        aboutButton.setPreferredSize(new Dimension(175,40));
+        bottomContainer.add(aboutButton,BorderLayout.LINE_END);
+
+        mainPanel.add(bottomContainer,BorderLayout.SOUTH);
+
+        mainFrame.getContentPane().add(mainPanel);
+
 		mainFrame.setVisible(true);
 	}
 
