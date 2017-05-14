@@ -41,7 +41,7 @@ public class GameWindow{
 		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
 		mainFrame.setResizable(false);
 		mainFrame.getContentPane().setBackground( Color.red );
-		mainFrame.setTitle("J�t�k ablak");
+		mainFrame.setTitle("Játék ablak");
 		
 		mainFrame.addWindowListener(new WindowListener() {
 

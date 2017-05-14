@@ -1,8 +1,6 @@
 package eduplay.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -20,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import com.sun.javaws.LocalInstallHandler;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 import eduplay.connection.Coordinator;
@@ -87,7 +86,18 @@ public class FunctionWindow {
 
 
         });
-		mainPanel.add(saveButton,BorderLayout.SOUTH);
+
+		saveButton.setPreferredSize(new Dimension(200, 30));
+
+		Container saveContainer = new Container();
+		saveContainer.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = new Insets(5,10,5,10);
+
+		saveContainer.add(saveButton,c);
+
+		mainPanel.add(saveContainer,BorderLayout.SOUTH);
 		
 		mainFrame.getContentPane().add(mainPanel);
 		

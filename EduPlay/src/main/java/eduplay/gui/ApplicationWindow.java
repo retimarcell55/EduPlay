@@ -1,8 +1,6 @@
 package eduplay.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.EventQueue;
+import java.awt.*;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -13,8 +11,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-
-import java.awt.Toolkit;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -38,117 +34,125 @@ import org.fife.ui.rsyntaxtextarea.*;
 
 public class ApplicationWindow {
 
-	private JFrame mainFrame;
-	private JButton compileButton;
-	private JPanel inputPanel;
-	private JPanel outputPanel;
-	private JPanel settingsPanel;
-	private JPanel mainPanel;
-	private RSyntaxTextArea inputTextField;
-	private JTextArea outputTextField;
-	private JLabel inputLabel;
-	private JLabel outputLabel;
-	private JButton rulesButton;
-	private JButton apiButton;
-	private JButton exitButton;
-	
-	JMenuBar mainMenuBar;
-	JMenu exerciseMenu;
-	JButton descriptionButton;
-	JButton helpButton;
-	JLabel selectedExerciseLabel;
-	JButton functionButton;
-	ArrayList<String> exercises;
-	ArrayList<JMenuItem> exerciseMenuItems;
-	
-	JScrollPane inputScrollPane;
-	JScrollPane outputScrollPane;
+    private JFrame mainFrame;
+    private JButton compileButton;
+    private JPanel inputPanel;
+    private JPanel outputPanel;
+    private JPanel settingsPanel;
+    private JPanel mainPanel;
+    private RSyntaxTextArea inputTextField;
+    private JTextArea outputTextField;
+    private JLabel inputLabel;
+    private JLabel outputLabel;
+    private JButton rulesButton;
+    private JButton apiButton;
+    private JButton exitButton;
 
-	public ApplicationWindow() {
-		initialize();
-	}
+    JMenuBar mainMenuBar;
+    JMenu exerciseMenu;
+    JButton descriptionButton;
+    JButton helpButton;
+    JLabel selectedExerciseLabel;
+    JButton functionButton;
+    ArrayList<String> exercises;
+    ArrayList<JMenuItem> exerciseMenuItems;
 
-	private void initialize() {
-		mainFrame = new JFrame();
-		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-		mainFrame.setBounds(dimension.width/2-1000/2, dimension.height/2-800/2, 1000, 800);
-		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainFrame.setTitle(Coordinator.appModule.getName());
-		mainFrame.setResizable(true);
-		
-		mainMenuBar = new JMenuBar();
-		exerciseMenu = new JMenu("Feladatok");
-		
-		exercises = Coordinator.appModule.getExercises();
-		exerciseMenuItems = new ArrayList<>();
-		
-		for(String exercise : exercises) {
-			JMenuItem newMenuItem = new JMenuItem(exercise);
-			newMenuItem.addActionListener(ev -> {
+    JScrollPane inputScrollPane;
+    JScrollPane outputScrollPane;
+
+    public ApplicationWindow() {
+        initialize();
+    }
+
+    private void initialize() {
+        mainFrame = new JFrame();
+        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+        mainFrame.setBounds(dimension.width / 2 - 1000 / 2, dimension.height / 2 - 800 / 2, 650, 800);
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.setTitle(Coordinator.appModule.getName());
+        mainFrame.setResizable(true);
+
+        mainMenuBar = new JMenuBar();
+        exerciseMenu = new JMenu("Feladatok");
+
+        exercises = Coordinator.appModule.getExercises();
+        exerciseMenuItems = new ArrayList<>();
+
+        for (String exercise : exercises) {
+            JMenuItem newMenuItem = new JMenuItem(exercise);
+            newMenuItem.addActionListener(ev -> {
                 Coordinator.appModule.setExercise(newMenuItem.getText().toString());
                 selectedExerciseLabel.setText("   Aktuális feladat: " + Coordinator.appModule.getSelectedExercise().toString());
             });
-			exerciseMenuItems.add(newMenuItem);
-			
-			exerciseMenu.add(newMenuItem);
-		}
-		
-		descriptionButton = new JButton("Aktuális feladat leírása");
-		descriptionButton.addActionListener(e -> JOptionPane.showMessageDialog(mainFrame, Coordinator.appModule.getDescription(), "Feladatleírás",
+            exerciseMenuItems.add(newMenuItem);
+
+            exerciseMenu.add(newMenuItem);
+        }
+
+        JMenu descriptionMenu = new JMenu("Aktuális feladat");
+        JMenuItem descriptionMenuItem1 = new JMenuItem("Aktuális feladat leírása");
+
+        descriptionMenuItem1.addActionListener(e -> JOptionPane.showMessageDialog(mainFrame, Coordinator.appModule.getDescription(), "Feladatleírás",
                 JOptionPane.INFORMATION_MESSAGE));
-		
-		helpButton = new JButton("Segítség");
-		helpButton.addActionListener(e -> JOptionPane.showMessageDialog(mainFrame, Coordinator.appModule.getHelp(), "Segítség",
+
+        descriptionMenu.add(descriptionMenuItem1);
+
+        JMenuItem descriptionMenuItem2 = new JMenuItem("Segítség az aktuális feladathoz");
+        descriptionMenuItem2.addActionListener(e -> JOptionPane.showMessageDialog(mainFrame, Coordinator.appModule.getHelp(), "Segítség",
                 JOptionPane.INFORMATION_MESSAGE));
-		
-		selectedExerciseLabel = new JLabel("Aktuális feladat: " + Coordinator.appModule.getSelectedExercise().toString());
-		selectedExerciseLabel.setBorder(new EmptyBorder(0, 0, 0, 100));
-		
-		functionButton = new JButton("Függvények");
-		functionButton.addActionListener(e -> EventQueue.invokeLater(() -> {
-try {
-FunctionWindow functionWindow = new FunctionWindow();
-} catch (Exception e12) {
-e12.printStackTrace();
-}
-}));
 
-		mainMenuBar.add(exerciseMenu);
-		mainMenuBar.add(descriptionButton);
-		mainMenuBar.add(helpButton);
-		mainMenuBar.add(functionButton);
-		mainMenuBar.add(Box.createHorizontalGlue());
-		mainMenuBar.add(selectedExerciseLabel);
-		mainFrame.setJMenuBar(mainMenuBar);
+        descriptionMenu.add(descriptionMenuItem2);
 
-		mainPanel = new JPanel();
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
+        JMenu functionMenu = new JMenu("Függvények");
+        JMenuItem functionMenuItem = new JMenuItem("Függvények és Globális deklarációk");
+        functionMenuItem.addActionListener(e -> EventQueue.invokeLater(() -> {
+            try {
+                FunctionWindow functionWindow = new FunctionWindow();
+            } catch (Exception e12) {
+                e12.printStackTrace();
+            }
+        }));
 
-		inputPanel = new JPanel(new BorderLayout());
-		inputPanel.setPreferredSize(new Dimension(1000, 300));
+        functionMenu.add(functionMenuItem);
 
-		inputLabel = new JLabel("Bemenet:");
-		inputPanel.add(inputLabel, BorderLayout.PAGE_START);
-		
-		CompletionProvider provider = createCompletionProvider();
-		AutoCompletion ac = new AutoCompletion(provider);
-		
-		inputTextField = new RSyntaxTextArea();
-		inputTextField.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
-		inputTextField.setCodeFoldingEnabled(true);
-		
-		ac.install(inputTextField);
-		
-		inputScrollPane = new JScrollPane(inputTextField, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		inputPanel.add(inputScrollPane, BorderLayout.CENTER);
+        selectedExerciseLabel = new JLabel("Aktuális feladat: " + Coordinator.appModule.getSelectedExercise().toString());
+        selectedExerciseLabel.setBorder(new EmptyBorder(0, 0, 0, 10));
 
-		compileButton = new JButton("Fordítás");
-		compileButton.addActionListener(arg0 -> {
+        mainMenuBar.add(exerciseMenu);
+        mainMenuBar.add(descriptionMenu);
+        mainMenuBar.add(functionMenu);
+        mainMenuBar.add(Box.createHorizontalGlue());
+        mainMenuBar.add(selectedExerciseLabel);
+        mainFrame.setJMenuBar(mainMenuBar);
+
+        mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
+
+        inputPanel = new JPanel(new BorderLayout());
+        inputPanel.setPreferredSize(new Dimension(1000, 300));
+
+        inputLabel = new JLabel("Bemenet:");
+        inputPanel.add(inputLabel, BorderLayout.PAGE_START);
+
+        CompletionProvider provider = createCompletionProvider();
+        AutoCompletion ac = new AutoCompletion(provider);
+
+        inputTextField = new RSyntaxTextArea();
+        inputTextField.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
+        inputTextField.setCodeFoldingEnabled(true);
+
+        ac.install(inputTextField);
+
+        inputScrollPane = new JScrollPane(inputTextField, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        inputPanel.add(inputScrollPane, BorderLayout.CENTER);
+
+        compileButton = new JButton("Fordítás és Játék indítása");
+        compileButton.addActionListener(arg0 -> {
 
             BufferedWriter writer;
             try {
-                if((!inputTextField.getText().trim().equals(""))) {
+                if ((!inputTextField.getText().trim().equals(""))) {
                     writer = new BufferedWriter(new FileWriter(Coordinator.FILE_SOURCE + "/Player.txt", false));
                     inputTextField.write(writer);
                     writer.close();
@@ -175,80 +179,97 @@ e12.printStackTrace();
             }
 
         });
-		inputPanel.add(compileButton, BorderLayout.PAGE_END);
 
-		mainPanel.add(inputPanel);
+        compileButton.setPreferredSize(new Dimension(225,30));
 
-		outputPanel = new JPanel(new BorderLayout());
-		outputPanel.setPreferredSize(new Dimension(1000, 300));
+        Container inputContainer = new Container();
+        inputContainer.setLayout(new GridBagLayout());
 
-		outputLabel = new JLabel("Kimenet:");
-		outputPanel.add(outputLabel, BorderLayout.PAGE_START);
+        inputContainer.add(compileButton);
 
-		outputTextField = new JTextArea();
-		outputTextField.setEditable(false);
-		outputScrollPane = new JScrollPane(outputTextField, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		outputPanel.add(outputScrollPane, BorderLayout.CENTER);
+        inputPanel.add(inputContainer, BorderLayout.PAGE_END);
 
-		mainPanel.add(outputPanel);
+        mainPanel.add(inputPanel);
 
-		settingsPanel = new JPanel(new BorderLayout());
+        outputPanel = new JPanel(new BorderLayout());
+        outputPanel.setPreferredSize(new Dimension(1000, 300));
 
-		rulesButton = new JButton("Szabályok");
-		rulesButton.setPreferredSize(new Dimension(250, 50));
-		rulesButton.addActionListener(e -> JOptionPane.showMessageDialog(mainFrame, Coordinator.appModule.getRules(), "Szabályok",
+        outputLabel = new JLabel("Kimenet:");
+        outputPanel.add(outputLabel, BorderLayout.PAGE_START);
+
+        outputTextField = new JTextArea();
+        outputTextField.setEditable(false);
+        outputScrollPane = new JScrollPane(outputTextField, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        outputPanel.add(outputScrollPane, BorderLayout.CENTER);
+
+        mainPanel.add(outputPanel);
+
+        settingsPanel = new JPanel(new BorderLayout());
+
+        Container settingsContainer = new Container();
+        settingsContainer.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = new Insets(0,10,5,10);
+
+        rulesButton = new JButton("A modul szabályai");
+        rulesButton.setPreferredSize(new Dimension(175, 30));
+        rulesButton.addActionListener(e -> JOptionPane.showMessageDialog(mainFrame, Coordinator.appModule.getRules(), "A modul szabályai",
                 JOptionPane.INFORMATION_MESSAGE));
-		settingsPanel.add(rulesButton, BorderLayout.LINE_START);
+        settingsContainer.add(rulesButton, c);
 
-		apiButton = new JButton("API");
-		apiButton.addActionListener(e -> JOptionPane.showMessageDialog(mainFrame, Coordinator.appModule.getApi(), "API",
+        apiButton = new JButton("Meghívható függvények");
+        apiButton.setPreferredSize(new Dimension(175, 30));
+        apiButton.addActionListener(e -> JOptionPane.showMessageDialog(mainFrame, Coordinator.appModule.getApi(), "Aktuálisan hívható függvények",
                 JOptionPane.INFORMATION_MESSAGE));
-		settingsPanel.add(apiButton, BorderLayout.CENTER);
+        settingsContainer.add(apiButton, c);
 
-		exitButton = new JButton("Kilépés");
-		exitButton.setPreferredSize(new Dimension(250, 50));
-		exitButton.addActionListener(e -> {
+        exitButton = new JButton("Kilépés a modulból");
+        exitButton.setPreferredSize(new Dimension(175, 30));
+        exitButton.addActionListener(e -> {
 
             mainFrame.dispose();
             Coordinator.returnFromApplicationWindow();
         });
-		settingsPanel.add(exitButton, BorderLayout.LINE_END);
+        settingsContainer.add(exitButton, c);
 
-		mainPanel.add(settingsPanel);
+        settingsPanel.add(settingsContainer);
 
-		mainFrame.getContentPane().add(mainPanel, BorderLayout.CENTER);
+        mainPanel.add(settingsPanel);
 
-		mainFrame.setVisible(true);
-		
-	}
+        mainFrame.getContentPane().add(mainPanel, BorderLayout.CENTER);
 
-	public void outputMessage(String message) {
-		outputTextField.append(message + "\n");
-	}
+        mainFrame.setVisible(true);
 
-	public void clearMessage() {
-		outputTextField.setText("");
-	}
+    }
 
-	public String getPlayerActionCode() {
-		return inputTextField.getText().toString();
-	}
-	
-	private CompletionProvider createCompletionProvider() {
-	      DefaultCompletionProvider completionProvider = new DefaultCompletionProvider();
+    public void outputMessage(String message) {
+        outputTextField.append(message + "\n");
+    }
 
-	      completionProvider.addCompletion(new BasicCompletion(completionProvider, "if() {}"));
-	      completionProvider.addCompletion(new BasicCompletion(completionProvider, "else if() {}"));
-	      completionProvider.addCompletion(new BasicCompletion(completionProvider, "while(true) {}"));
-	      completionProvider.addCompletion(new BasicCompletion(completionProvider, "else {}"));
-	      completionProvider.addCompletion(new BasicCompletion(completionProvider, "int"));
-	      completionProvider.addCompletion(new BasicCompletion(completionProvider, "String"));
-	      completionProvider.addCompletion(new BasicCompletion(completionProvider, "for(int i = 0 ; i < length; i++) {}"));
-	      completionProvider.addCompletion(new BasicCompletion(completionProvider, "String"));
+    public void clearMessage() {
+        outputTextField.setText("");
+    }
 
-	      return completionProvider;
+    public String getPlayerActionCode() {
+        return inputTextField.getText().toString();
+    }
 
-	   }
-	
+    private CompletionProvider createCompletionProvider() {
+        DefaultCompletionProvider completionProvider = new DefaultCompletionProvider();
+
+        completionProvider.addCompletion(new BasicCompletion(completionProvider, "if() {}"));
+        completionProvider.addCompletion(new BasicCompletion(completionProvider, "else if() {}"));
+        completionProvider.addCompletion(new BasicCompletion(completionProvider, "while(true) {}"));
+        completionProvider.addCompletion(new BasicCompletion(completionProvider, "else {}"));
+        completionProvider.addCompletion(new BasicCompletion(completionProvider, "int"));
+        completionProvider.addCompletion(new BasicCompletion(completionProvider, "String"));
+        completionProvider.addCompletion(new BasicCompletion(completionProvider, "for(int i = 0 ; i < length; i++) {}"));
+        completionProvider.addCompletion(new BasicCompletion(completionProvider, "String"));
+
+        return completionProvider;
+
+    }
+
 }
