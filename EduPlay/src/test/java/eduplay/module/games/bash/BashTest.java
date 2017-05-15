@@ -32,13 +32,13 @@ public class BashTest {
     @Test
     public void whatIsStronger() throws Exception {
 
-        assertEquals("66 is not stronger than 66, expected return value: 1",1,tester.whatIsStronger
+        assertEquals("66 is not stronger than 21, expected return value: 1",1,tester.whatIsStronger
                 (66,21));
 
         assertEquals("66 is stronger than 65, expected return value: 0",0,tester.whatIsStronger
                 (66,65));
 
-        assertEquals("66 is stronger than 65, expected return value: 0",2,tester.whatIsStronger
+        assertEquals("32 is stronger than 32, expected return value: 0",2,tester.whatIsStronger
                 (32,32));
 
         logger.debug("Executed test case:"+Thread.currentThread().getStackTrace()[1]);
@@ -89,6 +89,7 @@ public class BashTest {
         assertEquals("Expected: Not Real Name","Not Real Name",mockedBash.getName());
 
         logger.debug("Executed test case:"+Thread.currentThread().getStackTrace()[1]);
+
     }
 
 
